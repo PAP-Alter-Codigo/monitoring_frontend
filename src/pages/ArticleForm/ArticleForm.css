@@ -1,0 +1,66 @@
+/* ArticleForm.css */
+
+.article-form-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #f8f9fa; 
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.article-form-container h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.article-form-container p {
+  font-size: 1rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: #666;
+}
+
+.article-form-container p.required {
+  font-size: 0.75rem;
+  margin-bottom: 0;
+  text-align: left;
+  color: red;
+  font-weight: bold;
+}
+
+.article-form-container .form-label {
+  margin-top: 1rem;
+  font-weight: bold;
+}
+
+.article-form-container .form-check {
+  margin-left: 1rem;
+}
+
+.required {
+  color: red;
+  margin-left: .25rem;
+}
+
+.article-form-container button {
+  display: block;
+  background-color: #007bff;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: background 0.2s;
+  padding: 0.5rem, 1rem;
+  margin-left: auto;
+  margin-right: 0;
+  margin-top: 2rem;
+}
+
+.article-form-container button:hover,
+.article-form-container button:focus {
+  background-color: #0056b3;
+  outline: none;
+}
