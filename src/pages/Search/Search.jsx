@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import Filters from "./Filters";
 import ArticleList from "./ArticleList";
-
+import BrushStrokes from "../../utils/brushStrokes"
 import { fetchWithAuth } from "../../utils/fetchWithAuth";
 
 import Container from "react-bootstrap/Container";
 import "./Search.css";
+import ReturnMenu from "../../components/return-menu";
 
 function Search() {
   const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
@@ -79,8 +80,8 @@ function Search() {
 
     const actors = Array.isArray(item.actorsMentioned)
       ? item.actorsMentioned
-          .map((id) => actorsMap[id]?.toLowerCase() || "")
-          .join(", ")
+        .map((id) => actorsMap[id]?.toLowerCase() || "")
+        .join(", ")
       : "";
 
     const tags = Array.isArray(item.tags)
@@ -116,26 +117,55 @@ function Search() {
   if (!dataIsLoaded) return <div>Loading...</div>;
 
   return (
-    <div className="search-page">
-      <Container className="app-container mt-4">
-        <h1>Articulos</h1>
-        <Filters
-          filters={filters}
-          setFilters={setFilters}
-          tagsMap={tagsMap}
-          actorsMap={actorsMap}
-        />
-        <hr />
-        <h2>Resultados</h2>
-        <p>Numero de articulos: {filteredData.length}</p>
-        <ArticleList
-          articles={filteredData}
-          actorsMap={actorsMap}
-          tagsMap={tagsMap}
-          locationsMap={locationsMap}
-        />
-      </Container>
-    </div>
+    <>
+      <div className="min-vh-100 d-flex align-items-center justify-content-center position-relative overflow-hidden"
+        style={{ background: 'linear-gradient(135deg, #43C6AC 0%, #191654 100%)' }}>
+
+        {/* Decorative brush strokes background */}
+        <div className="position-absolute top-0 start-0 opacity-25">
+          <BrushStrokes variant="circle" color="#ffffff" width={120} height={120} strokeWidth={8} opacity={0.3} />
+        </div>
+        <div className="position-absolute" style={{ top: '15%', right: '10%', opacity: 0.2 }}>
+          <BrushStrokes variant="wave" color="#ffffff" width={180} height={60} strokeWidth={6} opacity={0.4} />
+        </div>
+        <div className="position-absolute" style={{ bottom: '20%', left: '5%', opacity: 0.15 }}>
+          <BrushStrokes variant="circle" color="#ffffff" width={100} height={100} strokeWidth={6} opacity={0.3} />
+        </div>
+        <div className="position-absolute" style={{ bottom: '10%', right: '15%', opacity: 0.2 }}>
+          <BrushStrokes variant="wave" color="#ffffff" width={150} height={50} strokeWidth={5} opacity={0.4} />
+        </div>
+
+
+
+        <div className="search-page">
+
+          {/* NAV BAR */}
+          <ReturnMenu/>
+
+          {/* MAIN CONTAINER */}
+          <Container className="app-container mt-4">
+            <h1 className="text-white pb-4">Articulos</h1>
+            <Filters
+              filters={filters}
+              setFilters={setFilters}
+              tagsMap={tagsMap}
+              actorsMap={actorsMap}
+            />
+            <hr />
+            <h2>Resultados</h2>
+            <p>Numero de articulos: {filteredData.length}</p>
+            <ArticleList
+              articles={filteredData}
+              actorsMap={actorsMap}
+              tagsMap={tagsMap}
+              locationsMap={locationsMap}
+            />
+          </Container>
+        </div>
+
+
+      </div>
+    </>
   );
 }
 
