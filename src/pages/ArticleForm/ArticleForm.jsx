@@ -2,11 +2,15 @@ import { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import "./ArticleForm.css";
+import BrushStrokes from "../../utils/brushStrokes"
+
 
 import { fetchWithAuth } from "../../utils/fetchWithAuth";
+import ReturnMenu from "../../components/return-menu";
 
 function ArticleForm() {
   const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+  
 
   const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState({
@@ -160,209 +164,232 @@ function ArticleForm() {
   };
 
   return (
-    <div className="article-form-page">
-      <div className="article-form-container">
-        <h1>MONITOREO - LOS LAURELES</h1>
-        <p>Seguimiento a las notas periodisticas en relacion al tema</p>
+    <>
+      <div className="min-vh-100 d-flex align-items-center justify-content-center position-relative overflow-hidden"
+        style={{ background: 'linear-gradient(135deg, #43C6AC 0%, #191654 100%)' }}>
 
-        <p className="required">* Indica valores requeridos</p>
-        <Form onSubmit={handleSubmit} className="article-form">
-          <Form.Label>
-            <strong>
-              Fecha de publicación <span className="required">*</span>
-            </strong>
-          </Form.Label>
-          <Form.Control
-            type="text"
-            name="publicationDate"
-            value={formData.publicationDate}
-            onChange={handleChange}
-            isInvalid={!!errors.publicationDate}
-            placeholder="MM/DD/YYYY"
-          />
+        {/* Decorative brush strokes background */}
+        <div className="position-absolute top-0 start-0 opacity-25">
+          <BrushStrokes variant="circle" color="#ffffff" width={120} height={120} strokeWidth={8} opacity={0.3} />
+        </div>
+        <div className="position-absolute" style={{ top: '15%', right: '10%', opacity: 0.2 }}>
+          <BrushStrokes variant="wave" color="#ffffff" width={180} height={60} strokeWidth={6} opacity={0.4} />
+        </div>
+        <div className="position-absolute" style={{ bottom: '20%', left: '5%', opacity: 0.15 }}>
+          <BrushStrokes variant="circle" color="#ffffff" width={100} height={100} strokeWidth={6} opacity={0.3} />
+        </div>
+        <div className="position-absolute" style={{ bottom: '10%', right: '15%', opacity: 0.2 }}>
+          <BrushStrokes variant="wave" color="#ffffff" width={150} height={50} strokeWidth={5} opacity={0.4} />
+        </div>
+        
 
-          <Form.Control.Feedback type="invalid">
-            {errors.publicationDate}
-          </Form.Control.Feedback>
+        <div className="article-form-page">
+          <ReturnMenu/>
 
-          <Form.Label>
-            <strong>
-              Encabezado <span className="required">*</span>
-            </strong>
-          </Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Ingrese el encabezado de la nota"
-            name="headline"
-            value={formData.headline}
-            onChange={handleChange}
-            isInvalid={!!errors.headline}
-          />
+          <div className="article-form-container">
+            <h1>MONITOREO - LOS LAURELES</h1>
+            <p>Seguimiento a las notas periodisticas en relacion al tema</p>
 
-          <Form.Control.Feedback type="invalid">
-            {errors.headline}
-          </Form.Control.Feedback>
+            <p className="required">* Indica valores requeridos</p>
+            <Form onSubmit={handleSubmit} className="article-form">
+              <Form.Label>
+                <strong>
+                  Fecha de publicación <span className="required">*</span>
+                </strong>
+              </Form.Label>
+              <Form.Control
+                type="text"
+                name="publicationDate"
+                value={formData.publicationDate}
+                onChange={handleChange}
+                isInvalid={!!errors.publicationDate}
+                placeholder="MM/DD/YYYY"
+              />
 
-          <Form.Label>
-            <strong>
-              Medio en el que aparece la nota (fuente)
-              <span className="required">*</span>
-            </strong>
-          </Form.Label>
-          {sources.map((val) => (
-            <Form.Check
-              key={val}
-              type="radio"
-              label={val}
-              name="sourceName"
-              value={val}
+              <Form.Control.Feedback type="invalid">
+                {errors.publicationDate}
+              </Form.Control.Feedback>
+
+              <Form.Label>
+                <strong>
+                  Encabezado <span className="required">*</span>
+                </strong>
+              </Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Ingrese el encabezado de la nota"
+                name="headline"
+                value={formData.headline}
+                onChange={handleChange}
+                isInvalid={!!errors.headline}
+              />
+
+              <Form.Control.Feedback type="invalid">
+                {errors.headline}
+              </Form.Control.Feedback>
+
+              <Form.Label>
+                <strong>
+                  Medio en el que aparece la nota (fuente)
+                  <span className="required">*</span>
+                </strong>
+              </Form.Label>
+              {sources.map((val) => (
+                <Form.Check
+                  key={val}
+                  type="radio"
+                  label={val}
+                  name="sourceName"
+                  value={val}
+                  onChange={handleChange}
+                  isInvalid={!!errors.sourceName}
+                />
+              ))}
+
+              <Form.Control.Feedback type="invalid">
+                {errors.sourceName}
+              </Form.Control.Feedback>
+
+              <Form.Label>
+                <strong>
+                  Nivel de cobertura del medio<span className="required">*</span>
+                </strong>
+              </Form.Label>
+              <Form.Select
+                name="coverageLevel"
+                value={formData.coverageLevel}
+                onChange={handleChange}
+              >
+                <option value="Local">Local</option>
+                <option value="Estatal">Estatal</option>
+                <option value="Nacional">Nacional</option>
+              </Form.Select>
+
+              <Form.Label>
+                <strong>
+                  Autora o autor de la nota <span className="required">*</span>
+                </strong>
+              </Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Ingrese el nombre del autor"
+                name="author"
+                value={formData.author}
+                onChange={handleChange}
+                isInvalid={!!errors.author}
+              />
+
+              <Form.Control.Feedback type="invalid">
+                {errors.author}
+              </Form.Control.Feedback>
+
+              <Form.Label>
+                <strong>
+                  Link a la nota <span className="required">*</span>
+                </strong>
+              </Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Ingrese el Link de la nota"
+                name="url"
+                value={formData.url}
+                onChange={handleChange}
+                isInvalid={!!errors.url}
+              />
+
+              <Form.Control.Feedback type="invalid">
+                {errors.url}
+              </Form.Control.Feedback>
+
+              {/* <Form.Label>
+              <strong>Tipo de publicación</strong>
+            </Form.Label>
+            {types.map((val) => (
+              <Form.Check
+                key={val}
+                type="radio"
+                label={val}
+                name="type"
+                value={val}
+                onChange={handleChange}
+              />
+            ))}
+            <Form.Label>
+              <strong>Formato/Soporte</strong>
+            </Form.Label>
+            {formats.map((val) => (
+              <Form.Check
+                key={val}
+                type="radio"
+                label={val}
+                name="format"
+                value={val}
+                onChange={handleChange}
+              />
+            ))}
+
+            <Form.Label>
+              <strong>Declaración</strong>
+            </Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={3}
+              placeholder="Ingrese una breve descripción del evento o situación"
+              name="description"
+              value={formData.description || ""}
               onChange={handleChange}
-              isInvalid={!!errors.sourceName}
-            />
-          ))}
+            /> */}
 
-          <Form.Control.Feedback type="invalid">
-            {errors.sourceName}
-          </Form.Control.Feedback>
+              <Form.Label>
+                <strong>Tags</strong>
+              </Form.Label>
+              {Object.entries(tagsMap).map(([id, name]) => (
+                <Form.Check
+                  key={id}
+                  type="checkbox"
+                  label={name}
+                  name="tags"
+                  value={id}
+                  onChange={handleCheckboxChange}
+                />
+              ))}
 
-          <Form.Label>
-            <strong>
-              Nivel de cobertura del medio<span className="required">*</span>
-            </strong>
-          </Form.Label>
-          <Form.Select
-            name="coverageLevel"
-            value={formData.coverageLevel}
-            onChange={handleChange}
-          >
-            <option value="Local">Local</option>
-            <option value="Estatal">Estatal</option>
-            <option value="Nacional">Nacional</option>
-          </Form.Select>
+              <Form.Label>
+                <strong>Ubicación</strong>
+              </Form.Label>
+              {Object.entries(locationsMap).map(([id, name]) => (
+                <Form.Check
+                  key={id}
+                  type="radio"
+                  label={name}
+                  name="location"
+                  value={id}
+                  onChange={handleChange}
+                />
+              ))}
 
-          <Form.Label>
-            <strong>
-              Autora o autor de la nota <span className="required">*</span>
-            </strong>
-          </Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Ingrese el nombre del autor"
-            name="author"
-            value={formData.author}
-            onChange={handleChange}
-            isInvalid={!!errors.author}
-          />
+              <Form.Label>
+                <strong>Actores Mencionados</strong>
+              </Form.Label>
+              {Object.entries(actorsMap).map(([id, name]) => (
+                <Form.Check
+                  key={id}
+                  type="checkbox"
+                  label={name}
+                  name="actors"
+                  value={id}
+                  onChange={handleCheckboxChange}
+                />
+              ))}
 
-          <Form.Control.Feedback type="invalid">
-            {errors.author}
-          </Form.Control.Feedback>
-
-          <Form.Label>
-            <strong>
-              Link a la nota <span className="required">*</span>
-            </strong>
-          </Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Ingrese el Link de la nota"
-            name="url"
-            value={formData.url}
-            onChange={handleChange}
-            isInvalid={!!errors.url}
-          />
-
-          <Form.Control.Feedback type="invalid">
-            {errors.url}
-          </Form.Control.Feedback>
-
-          {/* <Form.Label>
-          <strong>Tipo de publicación</strong>
-        </Form.Label>
-        {types.map((val) => (
-          <Form.Check
-            key={val}
-            type="radio"
-            label={val}
-            name="type"
-            value={val}
-            onChange={handleChange}
-          />
-        ))}
-        <Form.Label>
-          <strong>Formato/Soporte</strong>
-        </Form.Label>
-        {formats.map((val) => (
-          <Form.Check
-            key={val}
-            type="radio"
-            label={val}
-            name="format"
-            value={val}
-            onChange={handleChange}
-          />
-        ))}
-
-        <Form.Label>
-          <strong>Declaración</strong>
-        </Form.Label>
-        <Form.Control
-          as="textarea"
-          rows={3}
-          placeholder="Ingrese una breve descripción del evento o situación"
-          name="description"
-          value={formData.description || ""}
-          onChange={handleChange}
-        /> */}
-
-          <Form.Label>
-            <strong>Tags</strong>
-          </Form.Label>
-          {Object.entries(tagsMap).map(([id, name]) => (
-            <Form.Check
-              key={id}
-              type="checkbox"
-              label={name}
-              name="tags"
-              value={id}
-              onChange={handleCheckboxChange}
-            />
-          ))}
-
-          <Form.Label>
-            <strong>Ubicación</strong>
-          </Form.Label>
-          {Object.entries(locationsMap).map(([id, name]) => (
-            <Form.Check
-              key={id}
-              type="radio"
-              label={name}
-              name="location"
-              value={id}
-              onChange={handleChange}
-            />
-          ))}
-
-          <Form.Label>
-            <strong>Actores Mencionados</strong>
-          </Form.Label>
-          {Object.entries(actorsMap).map(([id, name]) => (
-            <Form.Check
-              key={id}
-              type="checkbox"
-              label={name}
-              name="actors"
-              value={id}
-              onChange={handleCheckboxChange}
-            />
-          ))}
-
-          <Button type="submit" variant="primary" className="mt-4">
-            Enviar
-          </Button>
-        </Form>
+              <Button type="submit" variant="primary" className="mt-4">
+                Enviar
+              </Button>
+            </Form>
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
