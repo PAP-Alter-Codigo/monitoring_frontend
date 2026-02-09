@@ -3,6 +3,7 @@ import BrushStrokes from '../utils/brushStrokes';
 
 function LoginPage() {
   const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+  console.log(apiUrl);
 
   const handleLogin = () => {
     window.location.href = `${apiUrl}/auth/google`;
