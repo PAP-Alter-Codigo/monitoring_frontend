@@ -23,7 +23,7 @@ function ArticleForm() {
     coverageLevel: "Local",
     actorsMentioned: [],
     tags: [],
-    location: "",
+    location: [],
     /*     publicationType: "",
     format: "",
     description: "",
@@ -119,7 +119,7 @@ function ArticleForm() {
     if (!formData.sourceName) newErrors.sourceName = "Fuente es requerida";
     if (!formData.url) newErrors.url = "Link a la nota es requerido";
     if (!formData.author) newErrors.author = "Autor es requerido";
-    if (!formData.location) newErrors.location = "Ubicación es requerida";
+    if (formData.location.length === 0) newErrors.location = "Ubicación es requerida";
 
     setErrors(newErrors);
 
@@ -155,7 +155,7 @@ function ArticleForm() {
           coverageLevel: "Local",
           actorsMentioned: [],
           tags: [],
-          location: "",
+          location: [],
         });
       } catch (error) {
         console.error("Error submitting form: ", error);
@@ -360,11 +360,12 @@ function ArticleForm() {
               {Object.entries(locationsMap).map(([id, name]) => (
                 <Form.Check
                   key={id}
-                  type="radio"
+                  type="checkbox"
                   label={name}
                   name="location"
                   value={id}
-                  onChange={handleChange}
+                  checked={formData.location.includes(id)}
+                  onChange={handleCheckboxChange}
                 />
               ))}
 

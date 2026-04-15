@@ -88,7 +88,9 @@ function Search() {
       ? item.tags.map((id) => tagsMap[id]?.toLowerCase() || "").join(", ")
       : "";
 
-    const location = locationsMap[item.location]?.toLowerCase() || "";
+    const location = Array.isArray(item.location)
+      ? item.location.map((loc) => loc.name?.toLowerCase() || "").join(", ")
+      : "";
 
     return (
       isInDateRange &&
