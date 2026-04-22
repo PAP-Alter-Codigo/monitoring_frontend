@@ -89,25 +89,32 @@ function Filters({ filters, setFilters, tagsMap, actorsMap }) {
         </Col>
       </Row>
       <Row className="mt-2">
-        <Col md={4}>
+        <Col md={3}>
           <Form.Control
             name="location"
             placeholder="Ubicación"
             onChange={handleInputChange}
           />
         </Col>
-        <Col md={4}>
+        <Col md={3}>
           <Form.Control
             name="coverageLevel"
             placeholder="Nivel de cobertura"
             onChange={handleInputChange}
           />
         </Col>
-        <Col md={4}>
+        <Col md={3}>
           <Form.Select name="paywall" onChange={handlePaywallChange}>
             <option value="">¿Paywall?</option>
             <option value="true">Si</option>
             <option value="false">No</option>
+          </Form.Select>
+        </Col>
+        <Col md={3}>
+          <Form.Select name="origin" onChange={handleInputChange}>
+            <option value="">Origen</option>
+            <option value="user">Usuario</option>
+            <option value="muninn">Muninn</option>
           </Form.Select>
         </Col>
       </Row>

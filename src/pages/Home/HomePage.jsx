@@ -125,7 +125,7 @@ function HomePage() {
                                     </div>
 
                                     <div className="position-relative d-inline-block mb-3">
-                                        <h3 className="card-title h4 fw-bold mb-0">Seguimiento</h3>
+                                        <h3 className="card-title h4 fw-bold mb-0">Admin</h3>
                                         <div className="position-absolute" style={{ bottom: '-8px', left: '0' }}>
                                             <BrushStrokes
                                                 variant="underline"
@@ -139,10 +139,9 @@ function HomePage() {
                                     </div>
 
                                     <p className="card-text text-muted mt-4 mb-4">
-                                        Seguimiento a las notas periodisticas en relacion al tema, en base a distintos filtros y fuentes
+                                        Pagina de administracion donde el admin puede crear nuevas tags y sources
                                     </p>
 
-                                    {/* Arrow indicator */}
                                     <div className="mt-4 text-end">
                                         <span
                                             className="text-primary fw-medium"
@@ -151,9 +150,9 @@ function HomePage() {
                                                 display: 'inline-block',
                                                 transform: hoveredCard === 'search' ? 'translateX(5px)' : 'translateX(0)'
                                             }}
-                                            onClick={() => navigate("/article-form")}
+                                            onClick={() => navigate("/admin-page")}
                                         >
-                                            Buscar Articulos →
+                                            Panel Admin →
                                         </span>
                                     </div>
                                 </div>
@@ -164,8 +163,6 @@ function HomePage() {
 
                 </div>
                 <NoticiasRecientes/>
-                
-                -
             </div>
         </>
     );
