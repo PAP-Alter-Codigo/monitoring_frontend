@@ -32,6 +32,7 @@ function Search() {
     actorsMentioned: [],
     tags: [],
     location: "",
+    origin: "",
   });
 
   useEffect(() => {
@@ -112,7 +113,9 @@ function Search() {
       (filters.tags.length === 0 ||
         filters.tags.some((tag) => tags.includes(tag.toLowerCase()))) &&
       (filters.location === "" ||
-        location.includes(filters.location.toLowerCase()))
+        location.includes(filters.location.toLowerCase())) &&
+      (filters.origin === "" ||
+        (item.origin || "").toLowerCase() === filters.origin.toLowerCase())
     );
   });
 
