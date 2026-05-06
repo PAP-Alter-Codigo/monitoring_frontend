@@ -39,6 +39,7 @@ function Search() {
     fetchWithAuth(`${apiUrl}/articles`)
       .then((res) => res.json())
       .then((data) => {
+        console.log(data);
         setData(data);
         setDataIsLoaded(true);
       });
