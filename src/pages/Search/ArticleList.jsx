@@ -1,25 +1,12 @@
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { parseDate } from '../../utils/parseDate';
 
 const MONTHS_ES = [
     'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
     'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
 ];
-
-function parseDate(str) {
-    if (!str) return null;
-    // ISO 8601 / YYYY-MM-DD
-    let d = new Date(str);
-    if (!isNaN(d)) return d;
-    // DD/MM/YYYY
-    const parts = str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-    if (parts) {
-        d = new Date(parseInt(parts[3]), parseInt(parts[2]) - 1, parseInt(parts[1]));
-        if (!isNaN(d)) return d;
-    }
-    return null;
-}
 
 function getMonthKey(publicationDate) {
     const date = parseDate(publicationDate);
