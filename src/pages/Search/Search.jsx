@@ -3,6 +3,7 @@ import Filters from "./Filters";
 import ArticleList from "./ArticleList";
 import BrushStrokes from "../../utils/brushStrokes"
 import { fetchWithAuth } from "../../utils/fetchWithAuth";
+import { parseDate } from "../../utils/parseDate";
 
 import Container from "react-bootstrap/Container";
 import "./Search.css";
@@ -62,17 +63,17 @@ function Search() {
   }, []);
 
   const filteredData = data.filter((item) => {
-    const articleDate = new Date(item.publicationDate);
+    const articleDate = parseDate(item.publicationDate);
     const startDate = filters.publicationDate.startDate
-      ? new Date(filters.publicationDate.startDate)
+      ? new Date(filters.publicationDate.startDate + 'T00:00:00Z')
       : null;
     const endDate = filters.publicationDate.endDate
-      ? new Date(filters.publicationDate.endDate)
+      ? new Date(filters.publicationDate.endDate + 'T23:59:59Z')
       : null;
 
     const isInDateRange =
-      (!startDate || articleDate >= startDate) &&
-      (!endDate || articleDate <= endDate);
+      articleDate && ((!startDate || articleDate >= startDate) &&
+      (!endDate || articleDate <= endDate));
 
     const headline = item.headline || "";
     const sourceName = item.sourceName || "";

@@ -203,7 +203,7 @@ function ArticleForm() {
                 value={formData.publicationDate}
                 onChange={handleChange}
                 isInvalid={!!errors.publicationDate}
-                placeholder="MM/DD/YYYY"
+                placeholder="DD/MM/AAAA"
               />
 
               <Form.Control.Feedback type="invalid">
