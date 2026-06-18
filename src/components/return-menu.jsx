@@ -19,7 +19,7 @@ function ReturnMenu() {
                         e.currentTarget.style.background = 'rgba(102, 126, 234, 0.1)';
                         e.currentTarget.style.transform = 'translateX(0) scale(1)';
                     }}
-                    onClick={() => navigate("/dashboard")}
+                    onClick={() => navigate(-1)}
                 >
                     <svg width="20" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M19 12H5M12 19l-7-7 7-7" />

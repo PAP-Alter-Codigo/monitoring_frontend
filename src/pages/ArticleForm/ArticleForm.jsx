@@ -3,6 +3,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import "./ArticleForm.css";
 import BrushStrokes from "../../utils/brushStrokes"
+import HelpTooltip from "../../components/HelpTooltip";
 
 
 import { fetchWithAuth } from "../../utils/fetchWithAuth";
@@ -10,7 +11,7 @@ import ReturnMenu from "../../components/return-menu";
 
 function ArticleForm() {
   const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
-  
+
 
   const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState({
@@ -181,10 +182,10 @@ function ArticleForm() {
         <div className="position-absolute" style={{ bottom: '10%', right: '15%', opacity: 0.2 }}>
           <BrushStrokes variant="wave" color="#ffffff" width={150} height={50} strokeWidth={5} opacity={0.4} />
         </div>
-        
+
 
         <div className="article-form-page">
-          <ReturnMenu/>
+          <ReturnMenu />
 
           <div className="article-form-container">
             <h1>MONITOREO - LOS LAURELES</h1>
@@ -389,6 +390,15 @@ function ArticleForm() {
             </Form>
           </div>
         </div>
+
+        <HelpTooltip
+          page="article-form"
+          positionStyle={{
+            position: "fixed",
+            bottom: "30px",
+            right: "30px"
+          }}
+        />
       </div>
     </>
   );

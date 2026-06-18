@@ -5,6 +5,7 @@ import ReturnMenu from "../../components/return-menu";
 import TagsManager from "./TagsManager";
 import SourceUrlsManager from "./SourceUrlsManager";
 import "./AdminPage.css";
+import HelpTooltip from "../../components/HelpTooltip";
 
 const TABS = [
     { key: "tags", label: "🏷️ Tags" },
@@ -60,7 +61,7 @@ function AdminPage() {
             </div>
 
             <div className="container-fluid px-4 pb-5">
-                <ReturnMenu/>
+                <ReturnMenu />
 
                 <div className="text-white mb-4 mt-2 p-4">
                     <div className="position-relative d-inline-block mb-2">
@@ -144,6 +145,15 @@ function AdminPage() {
                     </div>
                 </div>
             </div>
+
+            <HelpTooltip
+                page="admin"
+                positionStyle={{
+                    position: "fixed",
+                    bottom: "30px",
+                    right: "30px"
+                }}
+            />
         </div>
     );
 }

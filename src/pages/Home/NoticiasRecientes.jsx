@@ -45,7 +45,8 @@ export default function NoticiasRecientes() {
             {/* ARTICULOS */}
             <div className='mx-5 mb-5'>
                 {/* Recent News Section */}
-                <div className="card border-0 shadow-lg" style={{ borderRadius: '20px', background: 'rgba(255, 255, 255, 0.95)' }}>
+                <div className="card border-0 shadow-lg" style={{ borderRadius: '20px', background: 'rgba(255, 255, 255, 0.95)' }} onClick={() => navigate("/search")}>
+
                     <div className="card-body p-4 p-md-5">
 
                         {/* Header */}
@@ -65,9 +66,9 @@ export default function NoticiasRecientes() {
                             </div>
                             <button
                                 className="btn btn-sm btn-outline-primary rounded-pill"
-                                onClick={() => navigate("/search")}
+
                             >
-                                Ver todas →
+                                Ver todas
                             </button>
                         </div>
 
