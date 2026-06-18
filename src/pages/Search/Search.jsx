@@ -74,7 +74,7 @@ function Search() {
 
     const isInDateRange =
       articleDate && ((!startDate || articleDate >= startDate) &&
-        (!endDate || articleDate <= endDate));
+      (!endDate || articleDate <= endDate));
 
     const headline = item.headline || "";
     const sourceName = item.sourceName || "";
