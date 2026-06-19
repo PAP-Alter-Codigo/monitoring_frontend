@@ -1,0 +1,478 @@
+/* ===========================
+   FLOATING HELP BUTTON
+=========================== */
+
+.help-tooltip-btn {
+    width: 68px;
+    height: 68px;
+
+    border: none;
+    border-radius: 999px;
+
+    font-size: 1.8rem;
+
+    background:
+        linear-gradient(135deg,
+            #43c6ac,
+            #191654);
+
+    color: white;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 12px 32px rgba(67,
+            198,
+            172,
+            0.45);
+
+    position: fixed;
+
+    z-index: 999;
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        filter .25s ease;
+}
+
+.help-tooltip-btn:hover {
+
+    transform:
+        scale(1.08) rotate(6deg);
+
+    filter:
+        brightness(1.08);
+
+    box-shadow:
+        0 20px 50px rgba(67,
+            198,
+            172,
+            .55);
+
+}
+
+.help-tooltip-btn:active {
+
+    transform:
+        scale(.95);
+
+}
+
+
+/* ===========================
+   OVERLAY
+=========================== */
+
+.help-modal-overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    background:
+        rgba(15,
+            23,
+            42,
+            .45);
+
+    backdrop-filter:
+        blur(10px);
+
+    z-index: 9999;
+
+    animation:
+        fadeIn .25s ease;
+
+}
+
+
+/* ===========================
+   CARD
+=========================== */
+
+.help-dialog-card {
+
+    width:
+        min(620px,
+            92vw);
+
+    background:
+        rgba(255,
+            255,
+            255,
+            .85);
+
+    backdrop-filter:
+        blur(24px);
+
+    border-radius:
+        30px;
+
+    padding:
+        2rem;
+
+    border:
+        1px solid rgba(255,
+            255,
+            255,
+            .5);
+
+    box-shadow:
+        0 30px 80px rgba(0,
+            0,
+            0,
+            .18);
+
+    animation:
+        modalOpen .35s ease;
+
+}
+
+
+/* ===========================
+   HEADER
+=========================== */
+
+.help-dialog-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 2rem;
+
+}
+
+.help-dialog-title {
+
+    margin: 0;
+
+    font-size: 1.6rem;
+
+    font-weight: 700;
+
+    color:
+        #1f2937;
+
+}
+
+.help-dialog-close {
+
+    width: 44px;
+
+    height: 44px;
+
+    border: none;
+
+    border-radius: 999px;
+
+    background:
+        rgba(0,
+            0,
+            0,
+            .06);
+
+    cursor: pointer;
+
+    font-size: 1.2rem;
+
+    transition:
+        .2s;
+
+}
+
+.help-dialog-close:hover {
+
+    background:
+        #ef4444;
+
+    color:
+        white;
+
+    transform:
+        rotate(90deg);
+
+}
+
+
+/* ===========================
+   EMOJI
+=========================== */
+
+.help-animation-container {
+
+    text-align: center;
+
+    margin-bottom: 2rem;
+
+}
+
+.help-animation-container span {
+
+    display: inline-block;
+
+    font-size: 5rem;
+
+}
+
+
+/* ===========================
+   BODY
+=========================== */
+
+.help-dialog-body {
+
+    line-height: 1.8;
+
+}
+
+.help-dialog-body p {
+
+    margin-bottom: 1rem;
+
+}
+
+.help-dialog-body ul {
+
+    list-style: none;
+
+    padding-left: 0;
+
+}
+
+.help-dialog-body li {
+
+    position: relative;
+
+    padding-left: 28px;
+
+}
+
+.help-dialog-body li::before {
+
+    content: "✓";
+
+    position: absolute;
+
+    left: 0;
+
+    color:
+        #10b981;
+
+    font-weight: bold;
+
+}
+
+
+/* ===========================
+   PAGE ANIMATIONS
+=========================== */
+
+.anim-login-key {
+
+    animation:
+        floatKey 2.5s ease-in-out infinite;
+
+}
+
+.anim-home-dash {
+
+    animation:
+        pulseDash 1.8s infinite;
+
+}
+
+.anim-search-glass {
+
+    animation:
+        searchMove 2s infinite;
+
+}
+
+.anim-form-pencil {
+
+    animation:
+        pencilWrite 2.4s infinite;
+
+}
+
+.anim-admin-gear {
+
+    animation:
+        rotateGear 4s linear infinite;
+
+}
+
+
+/* ===========================
+   KEYFRAMES
+=========================== */
+
+@keyframes fadeIn {
+
+    from {
+
+        opacity: 0;
+
+    }
+
+    to {
+
+        opacity: 1;
+
+    }
+
+}
+
+@keyframes modalOpen {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(30px) scale(.95);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0) scale(1);
+
+    }
+
+}
+
+@keyframes floatKey {
+
+    0% {
+
+        transform:
+            translateY(0);
+
+    }
+
+    50% {
+
+        transform:
+            translateY(-12px);
+
+    }
+
+    100% {
+
+        transform:
+            translateY(0);
+
+    }
+
+}
+
+@keyframes pulseDash {
+
+    50% {
+
+        transform:
+            scale(1.12);
+
+    }
+
+}
+
+@keyframes searchMove {
+
+    50% {
+
+        transform:
+            rotate(15deg) translateX(12px);
+
+    }
+
+}
+
+@keyframes pencilWrite {
+
+    50% {
+
+        transform:
+            rotate(20deg);
+
+    }
+
+}
+
+@keyframes rotateGear {
+
+    from {
+
+        transform:
+            rotate(0);
+
+    }
+
+    to {
+
+        transform:
+            rotate(360deg);
+
+    }
+
+}
+
+
+/* ===========================
+   MOBILE
+=========================== */
+
+@media (max-width:768px) {
+
+    .help-dialog-card {
+
+        padding:
+            1.5rem;
+
+        border-radius:
+            24px;
+
+    }
+
+    .help-dialog-title {
+
+        font-size:
+            1.3rem;
+
+    }
+
+    .help-animation-container span {
+
+        font-size:
+            4rem;
+
+    }
+
+    .help-tooltip-btn {
+
+        width:
+            58px;
+
+        height:
+            58px;
+
+        font-size:
+            1.4rem;
+
+    }
+
+}

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import BrushStrokes from "../../utils/brushStrokes";
 import { useNavigate } from "react-router-dom";
 import NoticiasRecientes from './NoticiasRecientes';
+import HelpTooltip from '../../components/HelpTooltip';
 
 
 function HomePage() {
@@ -36,6 +37,7 @@ function HomePage() {
                                     transform: hoveredCard === 'news' ? 'translateY(-8px)' : 'translateY(0)',
                                     cursor: 'pointer'
                                 }}
+                                onClick={() => navigate("/search")}
                                 onMouseEnter={() => setHoveredCard('news')}
                                 onMouseLeave={() => setHoveredCard(null)}
                             >
@@ -83,9 +85,8 @@ function HomePage() {
                                                 display: 'inline-block',
                                                 transform: hoveredCard === 'news' ? 'translateX(5px)' : 'translateX(0)'
                                             }}
-                                            onClick={() => navigate("/search")}
                                         >
-                                            Buscar Articulos →
+                                            Buscar Articulos
                                         </span>
                                     </div>
                                 </div>
@@ -103,6 +104,7 @@ function HomePage() {
                                     transform: hoveredCard === 'search' ? 'translateY(-8px)' : 'translateY(0)',
                                     cursor: 'pointer'
                                 }}
+                                onClick={() => navigate("/admin-page")}
                                 onMouseEnter={() => setHoveredCard('search')}
                                 onMouseLeave={() => setHoveredCard(null)}
                             >
@@ -150,9 +152,8 @@ function HomePage() {
                                                 display: 'inline-block',
                                                 transform: hoveredCard === 'search' ? 'translateX(5px)' : 'translateX(0)'
                                             }}
-                                            onClick={() => navigate("/admin-page")}
                                         >
-                                            Panel Admin →
+                                            Panel Admin
                                         </span>
                                     </div>
                                 </div>
@@ -162,7 +163,16 @@ function HomePage() {
                     </div>
 
                 </div>
-                <NoticiasRecientes/>
+                <NoticiasRecientes />
+
+                <HelpTooltip
+                    page="home"
+                    positionStyle={{
+                        position: "fixed",
+                        bottom: "30px",
+                        right: "30px"
+                    }}
+                />
             </div>
         </>
     );

@@ -8,6 +8,7 @@ import { parseDate } from "../../utils/parseDate";
 import Container from "react-bootstrap/Container";
 import "./Search.css";
 import ReturnMenu from "../../components/return-menu";
+import HelpTooltip from "../../components/HelpTooltip";
 
 function Search() {
   const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
@@ -147,7 +148,7 @@ function Search() {
         <div className="search-page">
 
           {/* NAV BAR */}
-          <ReturnMenu/>
+          <ReturnMenu />
 
           {/* MAIN CONTAINER */}
           <Container className="app-container mt-4">
@@ -170,7 +171,14 @@ function Search() {
           </Container>
         </div>
 
-
+        <HelpTooltip
+          page="search"
+          positionStyle={{
+            position: "fixed",
+            bottom: "30px",
+            right: "30px"
+          }}
+        />
       </div>
     </>
   );
