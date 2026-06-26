@@ -74,27 +74,41 @@ function HelpTooltip({ page, positionStyle = {} }) {
         className="help-tooltip-btn"
         onClick={toggleTooltip}
         title="Mostrar Ayuda"
+        aria-label={`Mostrar ayuda sobre ${data.title}`}
+        aria-expanded={isOpen}
+        aria-controls="help-dialog"
         type="button"
         style={positionStyle}
       >
-        ❓
+        <span aria-hidden="true">❓</span>
       </button>
 
       {/* Glassmorphic Overlay & Dialog Box */}
       {isOpen && (
         <div className="help-modal-overlay" onClick={toggleTooltip}>
           <div
+            id="help-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="help-dialog-title"
             className="help-dialog-card"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="help-dialog-header">
-              <h4 className="help-dialog-title">💡 {data.title}</h4>
-              <button className="help-dialog-close" onClick={toggleTooltip}>
-                ✕
+              <h4 id="help-dialog-title" className="help-dialog-title">
+                <span aria-hidden="true">💡 </span>
+                {data.title}
+              </h4>
+              <button 
+                className="help-dialog-close" 
+                onClick={toggleTooltip}
+                aria-label="Cerrar diálogo de ayuda"
+              >
+                <span aria-hidden="true">✕</span>
               </button>
             </div>
 
-            <div className="help-animation-container">
+            <div className="help-animation-container" aria-hidden="true">
               <span className={`display-1 ${data.emojiClass}`}>
                 {data.emoji}
               </span>

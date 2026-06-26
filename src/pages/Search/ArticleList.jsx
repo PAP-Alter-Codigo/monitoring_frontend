@@ -2,6 +2,7 @@ import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { parseDate } from '../../utils/parseDate';
+import TTSButton from '../../components/TTSButton';
 
 const MONTHS_ES = [
     'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
@@ -40,7 +41,7 @@ function groupByMonth(articles) {
 }
 
 function ArticleList({ articles, actorsMap, tagsMap, locationsMap }) {
-    if (articles.length === 0) return <p>No articles found.</p>;
+    if (articles.length === 0) return <p>No se encontraron artículos.</p>;
 
     const groups = groupByMonth(articles);
 
@@ -78,7 +79,7 @@ function ArticleList({ articles, actorsMap, tagsMap, locationsMap }) {
 
                             return (
                                 <Col key={item.id} className="d-flex">
-                                    <Card className="w-100 d-flex flex-column" style={{ overflow: 'hidden' }}>
+                                    <Card id={`article-card-${item.id}`} className="w-100 d-flex flex-column" style={{ overflow: 'hidden' }}>
                                         <div style={{
                                             backgroundColor: originColor,
                                             color: '#fff',
@@ -91,8 +92,9 @@ function ArticleList({ articles, actorsMap, tagsMap, locationsMap }) {
                                             {originLabel}
                                         </div>
                                         <Card.Body className="d-flex flex-column">
-                                            <Card.Title>
+                                            <Card.Title className="d-flex justify-content-between align-items-start gap-2">
                                                 <a href={item.url || '#'}>{item.headline}</a>
+                                                <TTSButton selector={`#article-card-${item.id}`} className="flex-shrink-0" />
                                             </Card.Title>
                                             <Card.Text>
                                                 <strong>Autor:</strong> {item.author || 'N/A'}
@@ -104,7 +106,7 @@ function ArticleList({ articles, actorsMap, tagsMap, locationsMap }) {
                                                 <strong>Nombre de la Fuente:</strong> {item.sourceName || 'N/A'}
                                             </Card.Text>
                                             <Card.Text>
-                                                <strong>Paywall:</strong> {item.paywall === true ? 'Si' : item.paywall === false ? 'No' : 'N/A'}
+                                                <strong>Paywall:</strong> {item.paywall === true ? 'Sí' : item.paywall === false ? 'No' : 'N/A'}
                                             </Card.Text>
                                             <Card.Text>
                                                 <strong>Nivel de Cobertura:</strong> {item.coverageLevel || 'N/A'}
@@ -121,7 +123,7 @@ function ArticleList({ articles, actorsMap, tagsMap, locationsMap }) {
                                                     : 'N/A'}
                                             </Card.Text>
                                             <Card.Text>
-                                                <strong>Tags:</strong>{' '}
+                                                <strong>Etiquetas:</strong>{' '}
                                                 {Array.isArray(item.tags)
                                                     ? item.tags.map((id) => tagsMap[id] || id).join(', ')
                                                     : 'N/A'}

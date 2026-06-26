@@ -4,14 +4,13 @@ import Button from "react-bootstrap/Button";
 import "./ArticleForm.css";
 import BrushStrokes from "../../utils/brushStrokes"
 import HelpTooltip from "../../components/HelpTooltip";
-
+import TTSButton from "../../components/TTSButton";
 
 import { fetchWithAuth } from "../../utils/fetchWithAuth";
 import ReturnMenu from "../../components/return-menu";
 
 function ArticleForm() {
   const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
-
 
   const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState({
@@ -25,10 +24,6 @@ function ArticleForm() {
     actorsMentioned: [],
     tags: [],
     location: [],
-    /*     publicationType: "",
-    format: "",
-    description: "",
-    timestamp: null, */
   });
 
   const [tagsMap, setTagsMap] = useState({});
@@ -44,9 +39,10 @@ function ArticleForm() {
       const tMap = {},
         aMap = {},
         lMap = {};
-      tags.forEach((tag) => (tMap[tag.id] = tag.name));
-      actors.forEach((actor) => (aMap[actor.id] = actor.name));
-      locations.forEach((loc) => (lMap[loc.id] = loc.name));
+      // FIX: stringify IDs to avoid type mismatch with checkbox string values
+      tags.forEach((tag) => (tMap[String(tag.id)] = tag.name));
+      actors.forEach((actor) => (aMap[String(actor.id)] = actor.name));
+      locations.forEach((loc) => (lMap[String(loc.id)] = loc.name));
       setTagsMap(tMap);
       setActorsMap(aMap);
       setLocationsMap(lMap);
@@ -73,25 +69,6 @@ function ArticleForm() {
     "Radio UdeG",
     "REDTN Jalisco",
     "Telediario",
-  ];
-
-  const types = [
-    "Columna de opinion",
-    "Crónica",
-    "Editorial",
-    "Entrevista",
-    "Nota informativa (noticia)",
-    "Notas de agencia",
-    "Publicacion de Redes Sociales",
-    "Reportaje (texto mas extenso, implica investigacion)",
-  ];
-
-  const formats = [
-    "Audio/Radio",
-    "Fotografia/Fotoreportaje",
-    "Informacion grafica",
-    "Prensa Escrita",
-    "Video",
   ];
 
   const handleChange = (e) => {
@@ -126,7 +103,6 @@ function ArticleForm() {
 
     if (Object.keys(newErrors).length === 0) {
       console.log("Submitting form with data:", formData);
-      // formData.timestamp = new Date().toISOString();
       try {
         const response = await fetch(`${apiUrl}/articles`, {
           method: "POST",
@@ -183,7 +159,6 @@ function ArticleForm() {
           <BrushStrokes variant="wave" color="#ffffff" width={150} height={50} strokeWidth={5} opacity={0.4} />
         </div>
 
-
         <div className="article-form-page">
           <ReturnMenu />
 
@@ -193,11 +168,22 @@ function ArticleForm() {
 
             <p className="required">* Indica valores requeridos</p>
             <Form onSubmit={handleSubmit} className="article-form">
-              <Form.Label>
-                <strong>
-                  Fecha de publicación <span className="required">*</span>
-                </strong>
-              </Form.Label>
+
+              {/* Fecha de publicación */}
+              <div className="d-flex align-items-center gap-2 mb-2">
+                <Form.Label className="mb-0">
+                  <strong>
+                    Fecha de publicación <span className="required">*</span>
+                  </strong>
+                </Form.Label>
+                <TTSButton
+                  text={`Fecha de publicación. Requerido. Formato día, mes, año. ${
+                    formData.publicationDate
+                      ? `Valor actual: ${formData.publicationDate}`
+                      : "Está vacío. Ingrese la fecha de publicación."
+                  }`}
+                />
+              </div>
               <Form.Control
                 type="text"
                 name="publicationDate"
@@ -206,16 +192,25 @@ function ArticleForm() {
                 isInvalid={!!errors.publicationDate}
                 placeholder="DD/MM/AAAA"
               />
-
               <Form.Control.Feedback type="invalid">
                 {errors.publicationDate}
               </Form.Control.Feedback>
 
-              <Form.Label>
-                <strong>
-                  Encabezado <span className="required">*</span>
-                </strong>
-              </Form.Label>
+              {/* Encabezado */}
+              <div className="d-flex align-items-center gap-2 mb-2 mt-3">
+                <Form.Label className="mb-0">
+                  <strong>
+                    Encabezado <span className="required">*</span>
+                  </strong>
+                </Form.Label>
+                <TTSButton
+                  text={`Encabezado. Requerido. Ingrese el título de la nota. ${
+                    formData.headline
+                      ? `Valor actual: ${formData.headline}`
+                      : "Está vacío."
+                  }`}
+                />
+              </div>
               <Form.Control
                 type="text"
                 placeholder="Ingrese el encabezado de la nota"
@@ -224,17 +219,25 @@ function ArticleForm() {
                 onChange={handleChange}
                 isInvalid={!!errors.headline}
               />
-
               <Form.Control.Feedback type="invalid">
                 {errors.headline}
               </Form.Control.Feedback>
 
-              <Form.Label>
-                <strong>
-                  Medio en el que aparece la nota (fuente)
-                  <span className="required">*</span>
-                </strong>
-              </Form.Label>
+              {/* Fuente */}
+              <div className="d-flex align-items-center gap-2 mb-2 mt-3">
+                <Form.Label className="mb-0">
+                  <strong>
+                    Medio en el que aparece la nota (fuente) <span className="required">*</span>
+                  </strong>
+                </Form.Label>
+                <TTSButton
+                  text={`Medio o fuente. Requerido. ${
+                    formData.sourceName
+                      ? `Seleccionado: ${formData.sourceName}`
+                      : "Ninguna fuente seleccionada de la lista."
+                  }`}
+                />
+              </div>
               {sources.map((val) => (
                 <Form.Check
                   key={val}
@@ -242,20 +245,26 @@ function ArticleForm() {
                   label={val}
                   name="sourceName"
                   value={val}
+                  checked={formData.sourceName === val}
                   onChange={handleChange}
                   isInvalid={!!errors.sourceName}
                 />
               ))}
-
               <Form.Control.Feedback type="invalid">
                 {errors.sourceName}
               </Form.Control.Feedback>
 
-              <Form.Label>
-                <strong>
-                  Nivel de cobertura del medio<span className="required">*</span>
-                </strong>
-              </Form.Label>
+              {/* Nivel de cobertura */}
+              <div className="d-flex align-items-center gap-2 mb-2 mt-3">
+                <Form.Label className="mb-0">
+                  <strong>
+                    Nivel de cobertura del medio <span className="required">*</span>
+                  </strong>
+                </Form.Label>
+                <TTSButton
+                  text={`Nivel de cobertura del medio. Requerido. Valor actual: ${formData.coverageLevel}`}
+                />
+              </div>
               <Form.Select
                 name="coverageLevel"
                 value={formData.coverageLevel}
@@ -266,11 +275,21 @@ function ArticleForm() {
                 <option value="Nacional">Nacional</option>
               </Form.Select>
 
-              <Form.Label>
-                <strong>
-                  Autora o autor de la nota <span className="required">*</span>
-                </strong>
-              </Form.Label>
+              {/* Autor */}
+              <div className="d-flex align-items-center gap-2 mb-2 mt-3">
+                <Form.Label className="mb-0">
+                  <strong>
+                    Autora o autor de la nota <span className="required">*</span>
+                  </strong>
+                </Form.Label>
+                <TTSButton
+                  text={`Autora o autor de la nota. Requerido. ${
+                    formData.author
+                      ? `Valor actual: ${formData.author}`
+                      : "Está vacío. Ingrese el nombre del autor."
+                  }`}
+                />
+              </div>
               <Form.Control
                 type="text"
                 placeholder="Ingrese el nombre del autor"
@@ -279,16 +298,25 @@ function ArticleForm() {
                 onChange={handleChange}
                 isInvalid={!!errors.author}
               />
-
               <Form.Control.Feedback type="invalid">
                 {errors.author}
               </Form.Control.Feedback>
 
-              <Form.Label>
-                <strong>
-                  Link a la nota <span className="required">*</span>
-                </strong>
-              </Form.Label>
+              {/* URL */}
+              <div className="d-flex align-items-center gap-2 mb-2 mt-3">
+                <Form.Label className="mb-0">
+                  <strong>
+                    Link a la nota <span className="required">*</span>
+                  </strong>
+                </Form.Label>
+                <TTSButton
+                  text={`Enlace o link de la nota. Requerido. ${
+                    formData.url
+                      ? `Valor actual: ${formData.url}`
+                      : "Está vacío. Ingrese el enlace de la nota."
+                  }`}
+                />
+              </div>
               <Form.Control
                 type="text"
                 placeholder="Ingrese el Link de la nota"
@@ -297,53 +325,23 @@ function ArticleForm() {
                 onChange={handleChange}
                 isInvalid={!!errors.url}
               />
-
               <Form.Control.Feedback type="invalid">
                 {errors.url}
               </Form.Control.Feedback>
 
-              {/* <Form.Label>
-              <strong>Tipo de publicación</strong>
-            </Form.Label>
-            {types.map((val) => (
-              <Form.Check
-                key={val}
-                type="radio"
-                label={val}
-                name="type"
-                value={val}
-                onChange={handleChange}
-              />
-            ))}
-            <Form.Label>
-              <strong>Formato/Soporte</strong>
-            </Form.Label>
-            {formats.map((val) => (
-              <Form.Check
-                key={val}
-                type="radio"
-                label={val}
-                name="format"
-                value={val}
-                onChange={handleChange}
-              />
-            ))}
-
-            <Form.Label>
-              <strong>Declaración</strong>
-            </Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={3}
-              placeholder="Ingrese una breve descripción del evento o situación"
-              name="description"
-              value={formData.description || ""}
-              onChange={handleChange}
-            /> */}
-
-              <Form.Label>
-                <strong>Tags</strong>
-              </Form.Label>
+              {/* Etiquetas */}
+              <div className="d-flex align-items-center gap-2 mb-2 mt-3">
+                <Form.Label className="mb-0">
+                  <strong>Etiquetas</strong>
+                </Form.Label>
+                <TTSButton
+                  text={`Etiquetas del artículo. ${
+                    formData.tags.length > 0
+                      ? `Seleccionadas: ${formData.tags.map(id => tagsMap[id] || id).join(', ')}`
+                      : "Ninguna etiqueta seleccionada."
+                  }`}
+                />
+              </div>
               {Object.entries(tagsMap).map(([id, name]) => (
                 <Form.Check
                   key={id}
@@ -351,13 +349,26 @@ function ArticleForm() {
                   label={name}
                   name="tags"
                   value={id}
+                  checked={formData.tags.includes(id)}
                   onChange={handleCheckboxChange}
                 />
               ))}
 
-              <Form.Label>
-                <strong>Ubicación</strong>
-              </Form.Label>
+              {/* Ubicación */}
+              <div className="d-flex align-items-center gap-2 mb-2 mt-3">
+                <Form.Label className="mb-0">
+                  <strong>
+                    Ubicación <span className="required">*</span>
+                  </strong>
+                </Form.Label>
+                <TTSButton
+                  text={`Ubicación. Requerido. ${
+                    formData.location.length > 0
+                      ? `Seleccionadas: ${formData.location.map(id => locationsMap[id] || id).join(', ')}`
+                      : "Ninguna ubicación seleccionada."
+                  }`}
+                />
+              </div>
               {Object.entries(locationsMap).map(([id, name]) => (
                 <Form.Check
                   key={id}
@@ -367,19 +378,34 @@ function ArticleForm() {
                   value={id}
                   checked={formData.location.includes(id)}
                   onChange={handleCheckboxChange}
+                  isInvalid={!!errors.location}
                 />
               ))}
+              {errors.location && (
+                <div className="invalid-feedback d-block">{errors.location}</div>
+              )}
 
-              <Form.Label>
-                <strong>Actores Mencionados</strong>
-              </Form.Label>
+              {/* Actores Mencionados */}
+              <div className="d-flex align-items-center gap-2 mb-2 mt-3">
+                <Form.Label className="mb-0">
+                  <strong>Actores Mencionados</strong>
+                </Form.Label>
+                <TTSButton
+                  text={`Actores mencionados. ${
+                    formData.actorsMentioned.length > 0
+                      ? `Seleccionados: ${formData.actorsMentioned.map(id => actorsMap[id] || id).join(', ')}`
+                      : "Ningún actor seleccionado."
+                  }`}
+                />
+              </div>
               {Object.entries(actorsMap).map(([id, name]) => (
                 <Form.Check
                   key={id}
                   type="checkbox"
                   label={name}
-                  name="actors"
+                  name="actorsMentioned"
                   value={id}
+                  checked={formData.actorsMentioned.includes(id)}
                   onChange={handleCheckboxChange}
                 />
               ))}

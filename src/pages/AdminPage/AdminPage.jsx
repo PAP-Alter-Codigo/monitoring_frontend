@@ -6,10 +6,11 @@ import TagsManager from "./TagsManager";
 import SourceUrlsManager from "./SourceUrlsManager";
 import "./AdminPage.css";
 import HelpTooltip from "../../components/HelpTooltip";
+import TTSButton from "../../components/TTSButton";
 
 const TABS = [
-    { key: "tags", label: "🏷️ Tags" },
-    { key: "sources", label: "🔗 Fuentes (Source URLs)" },
+    { key: "tags", label: "🏷️ Etiquetas" },
+    { key: "sources", label: "🔗 Fuentes de Origen" },
 ];
 
 function AdminPage() {
@@ -83,7 +84,7 @@ function AdminPage() {
                         </div>
                     </div>
                     <p className="text-white-80 mt-3 mb-0">
-                        Gestiona los tags y fuentes del sistema de monitoreo
+                        Gestiona las etiquetas y fuentes de origen del sistema de monitoreo
                     </p>
                 </div>
 
@@ -105,12 +106,18 @@ function AdminPage() {
                             <span className="fs-3">📝</span>
                         </div>
                         <div className="flex-grow-1">
-                            <h5 className="mb-1 fw-bold">Alta de Artículos</h5>
+                            <h5 className="mb-1 fw-bold"> Alta de Artículos
+                                <TTSButton
+                                    text={`Ingresa nuevos artículos periodísticos al sistema de monitoreo de manera manual.`}
+                                    onClick={(e) => e.stopPropagation()}
+                                />
+                            </h5>
                             <p className="mb-0 text-muted small">
                                 Ingresa nuevos artículos periodísticos al
                                 sistema de monitoreo
                             </p>
                         </div>
+
                         <span className="text-primary fw-semibold">
                             Ir al formulario →
                         </span>

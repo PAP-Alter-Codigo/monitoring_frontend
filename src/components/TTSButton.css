@@ -1,0 +1,45 @@
+.tts-btn {
+  background: linear-gradient(135deg, #ffe000 0%, #ff8c00 100%);
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 10px rgba(255, 140, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.15);
+  padding: 0;
+  color: #000000;
+}
+
+.tts-btn:hover {
+  background: linear-gradient(135deg, #fff200 0%, #ffaa00 100%);
+  transform: scale(1.15) rotate(5deg);
+  box-shadow: 0 6px 15px rgba(255, 140, 0, 0.6), 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.tts-btn.speaking {
+  background: linear-gradient(135deg, #ff0055 0%, #ff3300 100%);
+  border-color: #ffffff;
+  color: #ffffff;
+  animation: pulse-tts 1.2s infinite;
+}
+
+.tts-icon {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+@keyframes pulse-tts {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 0, 85, 0.6);
+  }
+  70% {
+    box-shadow: 0 0 0 12px rgba(255, 0, 85, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 0, 85, 0);
+  }
+}

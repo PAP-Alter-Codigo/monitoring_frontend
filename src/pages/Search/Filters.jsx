@@ -2,8 +2,9 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Accordion from "react-bootstrap/Accordion";
+import TTSButton from "../../components/TTSButton";
 
-function Filters({ filters, setFilters, tagsMap, actorsMap }) {
+function Filters({ filters, setFilters, tagsMap, actorsMap, locationsMap, sourceNames, coverageLevels, authorNames }) {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFilters((prev) => ({ ...prev, [name]: value }));
@@ -45,9 +46,12 @@ function Filters({ filters, setFilters, tagsMap, actorsMap }) {
     <Form className="filters mb-4">
       <Row>
         <Col md={6}>
-          <Form.Label>
-            <strong>Fecha de inicio:</strong>
-          </Form.Label>
+          <div className="d-flex align-items-center gap-2 mb-1">
+            <Form.Label className="mb-0 text-white">
+              <strong style={{ color: 'black' }}>Fecha de inicio:</strong>
+            </Form.Label>
+            <TTSButton text={`Fecha de inicio para búsqueda de artículos. ${filters.publicationDate.startDate ? `Valor actual: ${filters.publicationDate.startDate}` : "Vacía."}`} />
+          </div>
           <Form.Control
             type="date"
             value={filters.publicationDate.startDate}
@@ -55,9 +59,12 @@ function Filters({ filters, setFilters, tagsMap, actorsMap }) {
           />
         </Col>
         <Col md={6}>
-          <Form.Label>
-            <strong>Fecha de fin:</strong>
-          </Form.Label>
+          <div className="d-flex align-items-center gap-2 mb-1">
+            <Form.Label className="mb-0 text-white">
+              <strong style={{ color: 'black' }}>Fecha de fin:</strong>
+            </Form.Label>
+            <TTSButton text={`Fecha de fin para búsqueda de artículos. ${filters.publicationDate.endDate ? `Valor actual: ${filters.publicationDate.endDate}` : "Vacía."}`} />
+          </div>
           <Form.Control
             type="date"
             value={filters.publicationDate.endDate}
@@ -67,52 +74,115 @@ function Filters({ filters, setFilters, tagsMap, actorsMap }) {
       </Row>
       <Row className="mt-2">
         <Col md={4}>
+          <div className="d-flex align-items-center gap-2 mb-1">
+            <Form.Label className="mb-0 text-white">
+              <strong style={{ color: 'black' }}>Título:</strong>
+            </Form.Label>
+            <TTSButton text={`Buscar por título. ${filters.headline ? `Buscando: ${filters.headline}` : "Vacío."}`} />
+          </div>
           <Form.Control
             name="headline"
             placeholder="Título"
+            value={filters.headline}
             onChange={handleInputChange}
           />
         </Col>
         <Col md={4}>
-          <Form.Control
+          <div className="d-flex align-items-center gap-2 mb-1">
+            <Form.Label className="mb-0 text-white">
+              <strong style={{ color: 'black' }}>Autor:</strong>
+            </Form.Label>
+            <TTSButton text={`Filtrar por autor. ${filters.author ? `Seleccionado: ${filters.author}` : "Cualquier autor."}`} />
+          </div>
+          <Form.Select
             name="author"
-            placeholder="Autor"
+            value={filters.author}
             onChange={handleInputChange}
-          />
+          >
+            <option value="">Cualquier autor</option>
+            {authorNames?.map((author, idx) => (
+              <option key={idx} value={author}>{author}</option>
+            ))}
+          </Form.Select>
         </Col>
         <Col md={4}>
-          <Form.Control
+          <div className="d-flex align-items-center gap-2 mb-1">
+            <Form.Label className="mb-0 text-white">
+              <strong style={{ color: 'black' }}>Fuente:</strong>
+            </Form.Label>
+            <TTSButton text={`Filtrar por nombre de la fuente. ${filters.sourceName ? `Seleccionada: ${filters.sourceName}` : "Cualquier fuente."}`} />
+          </div>
+          <Form.Select
             name="sourceName"
-            placeholder="Nombre de la fuente"
+            value={filters.sourceName}
             onChange={handleInputChange}
-          />
+          >
+            <option value="">Cualquier fuente</option>
+            {sourceNames?.map((source, idx) => (
+              <option key={idx} value={source}>{source}</option>
+            ))}
+          </Form.Select>
         </Col>
       </Row>
       <Row className="mt-2">
         <Col md={3}>
-          <Form.Control
+          <div className="d-flex align-items-center gap-2 mb-1">
+            <Form.Label className="mb-0 text-white">
+              <strong style={{ color: 'black' }}>Ubicación:</strong>
+            </Form.Label>
+            <TTSButton text={`Filtrar por ubicación. ${filters.location ? `Seleccionada: ${filters.location}` : "Cualquier ubicación."}`} />
+          </div>
+          <Form.Select
             name="location"
-            placeholder="Ubicación"
+            value={filters.location}
             onChange={handleInputChange}
-          />
+          >
+            <option value="">Cualquier ubicación</option>
+            {locationsMap && Object.values(locationsMap).map((name, idx) => (
+              <option key={idx} value={name}>{name}</option>
+            ))}
+          </Form.Select>
         </Col>
         <Col md={3}>
-          <Form.Control
+          <div className="d-flex align-items-center gap-2 mb-1">
+            <Form.Label className="mb-0 text-white">
+              <strong style={{ color: 'black' }}>Cobertura:</strong>
+            </Form.Label>
+            <TTSButton text={`Filtrar por nivel de cobertura. ${filters.coverageLevel ? `Seleccionado: ${filters.coverageLevel}` : "Cualquier cobertura."}`} />
+          </div>
+          <Form.Select
             name="coverageLevel"
-            placeholder="Nivel de cobertura"
+            value={filters.coverageLevel}
             onChange={handleInputChange}
-          />
+          >
+            <option value="">Cualquier cobertura</option>
+            {coverageLevels?.map((level, idx) => (
+              <option key={idx} value={level}>{level}</option>
+            ))}
+          </Form.Select>
         </Col>
         <Col md={3}>
-          <Form.Select name="paywall" onChange={handlePaywallChange}>
-            <option value="">¿Paywall?</option>
-            <option value="true">Si</option>
+          <div className="d-flex align-items-center gap-2 mb-1">
+            <Form.Label className="mb-0 text-white">
+              <strong style={{ color: 'black' }}>Paywall:</strong>
+            </Form.Label>
+            <TTSButton text={`Filtrar por paywall. ${filters.paywall === null ? "Cualquiera" : filters.paywall ? "Sólo con paywall" : "Sólo sin paywall"}`} />
+          </div>
+          <Form.Select name="paywall" value={filters.paywall !== null ? String(filters.paywall) : ""} onChange={handlePaywallChange}>
+            <option value="">Cualquiera</option>
+            <option value="true">Sí</option>
             <option value="false">No</option>
           </Form.Select>
         </Col>
         <Col md={3}>
-          <Form.Select name="origin" onChange={handleInputChange}>
-            <option value="">Origen</option>
+          <div className="d-flex align-items-center gap-2 mb-1">
+            <Form.Label className="mb-0 text-white">
+              <strong style={{ color: 'black' }}>Origen:</strong>
+            </Form.Label>
+            <TTSButton text={`Filtrar por origen del artículo. ${filters.origin ? `Origen: ${filters.origin}` : "Cualquier origen."}`} />
+          </div>
+          <Form.Select name="origin" value={filters.origin} onChange={handleInputChange}>
+            <option value="">Cualquiera</option>
             <option value="user">Usuario</option>
             <option value="muninn">Muninn</option>
           </Form.Select>
@@ -121,7 +191,15 @@ function Filters({ filters, setFilters, tagsMap, actorsMap }) {
 
       <Accordion defaultActiveKey={null} className="mt-4">
         <Accordion.Item eventKey="0">
-          <Accordion.Header>Etiquetas</Accordion.Header>
+          <Accordion.Header>
+            <div className="d-flex align-items-center gap-2 w-100 justify-content-between pe-3">
+              <span style={{ color: 'black' }}>Etiquetas</span>
+              <TTSButton
+                text={`Filtrar por etiquetas. ${filters.tags.length > 0 ? `Seleccionadas: ${filters.tags.join(', ')}` : "Ninguna etiqueta seleccionada."}`}
+                onClick={(e) => e.stopPropagation()}
+              />
+            </div>
+          </Accordion.Header>
           <Accordion.Body>
             <Row>
               {Object.entries(tagsMap).map(([id, name]) => (
@@ -140,7 +218,15 @@ function Filters({ filters, setFilters, tagsMap, actorsMap }) {
         </Accordion.Item>
 
         <Accordion.Item eventKey="1">
-          <Accordion.Header>Actores Mencionados</Accordion.Header>
+          <Accordion.Header>
+            <div className="d-flex align-items-center gap-2 w-100 justify-content-between pe-3">
+              <span style={{ color: 'black' }}>Actores Mencionados</span>
+              <TTSButton
+                text={`Filtrar por actores mencionados. ${filters.actorsMentioned.length > 0 ? `Seleccionados: ${filters.actorsMentioned.join(', ')}` : "Ningún actor seleccionado."}`}
+                onClick={(e) => e.stopPropagation()}
+              />
+            </div>
+          </Accordion.Header>
           <Accordion.Body>
             <Row>
               {Object.entries(actorsMap).map(([id, name]) => (

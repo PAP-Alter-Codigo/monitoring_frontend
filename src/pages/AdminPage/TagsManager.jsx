@@ -5,6 +5,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import { fetchWithAuth } from '../../utils/fetchWithAuth';
 import ConfirmModal from '../../components/ConfirmModal';
 import ToastNotification from '../../components/ToastNotification';
+import TTSButton from '../../components/TTSButton';
 
 function TagsManager() {
   const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
@@ -23,7 +24,7 @@ function TagsManager() {
       const data = await res.json();
       setTags(data);
     } catch {
-      showToast('Error al cargar los tags', 'danger');
+      showToast('Error al cargar las etiquetas', 'danger');
     }
   };
 
@@ -51,11 +52,11 @@ function TagsManager() {
         body: JSON.stringify({ name: editValue.trim() }),
       });
       if (!res.ok) throw new Error();
-      showToast('Tag actualizado exitosamente');
+      showToast('Etiqueta actualizada exitosamente');
       setEditingId(null);
       await fetchTags();
     } catch {
-      showToast('Error al actualizar el tag', 'danger');
+      showToast('Error al actualizar la etiqueta', 'danger');
     } finally {
       setLoading(false);
     }
@@ -69,10 +70,10 @@ function TagsManager() {
     try {
       const res = await fetchWithAuth(`${apiUrl}/tags/${modal.id}`, { method: 'DELETE' });
       if (!res.ok) throw new Error();
-      showToast('Tag eliminado exitosamente');
+      showToast('Etiqueta eliminada exitosamente');
       await fetchTags();
     } catch {
-      showToast('Error al eliminar el tag', 'danger');
+      showToast('Error al eliminar la etiqueta', 'danger');
     } finally {
       setLoading(false);
       setModal({ show: false, id: null, name: '' });
@@ -88,11 +89,11 @@ function TagsManager() {
         body: JSON.stringify({ name: newTagName.trim() }),
       });
       if (!res.ok) throw new Error();
-      showToast('Tag creado exitosamente');
+      showToast('Etiqueta creada exitosamente');
       setNewTagName('');
       await fetchTags();
     } catch {
-      showToast('Error al crear el tag', 'danger');
+      showToast('Error al crear la etiqueta', 'danger');
     } finally {
       setLoading(false);
     }
@@ -108,19 +109,23 @@ function TagsManager() {
       />
       <ConfirmModal
         show={modal.show}
-        title="Eliminar Tag"
-        message={`¿Estás seguro de que deseas eliminar el tag "${modal.name}"? Esta acción no se puede deshacer.`}
+        title="Eliminar Etiqueta"
+        message={`¿Estás seguro de que deseas eliminar la etiqueta "${modal.name}"? Esta acción no se puede deshacer.`}
         onConfirm={handleDelete}
         onCancel={() => setModal({ show: false, id: null, name: '' })}
       />
 
       <div className="mb-4">
-        <h6 className="fw-bold text-muted mb-3 text-uppercase" style={{ fontSize: '0.75rem', letterSpacing: '0.08em' }}>
-          Nuevo Tag
+        <h6 className="fw-bold text-muted mb-3 text-uppercase d-flex align-items-center gap-2" style={{ fontSize: '0.75rem', letterSpacing: '0.08em' }}>
+          Nueva Etiqueta
+          <TTSButton
+            text="Agrega una nueva etiqueta al sistema escribiendo su nombre y presionando Agregar o la tecla Enter."
+            onClick={(e) => e.stopPropagation()}
+          />
         </h6>
         <InputGroup style={{ maxWidth: '480px' }}>
           <Form.Control
-            placeholder="Nombre del tag"
+            placeholder="Nombre de la etiqueta"
             value={newTagName}
             onChange={e => setNewTagName(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && createTag()}
@@ -139,7 +144,7 @@ function TagsManager() {
         <table className="table table-hover align-middle mb-0">
           <thead>
             <tr className="border-bottom">
-              <th className="text-muted fw-semibold pb-3" style={{ width: '60px', fontSize: '0.8rem' }}>#</th>
+              <th className="text-muted fw-semibold pb-3" style={{ width: '80px', fontSize: '0.8rem' }}>#</th>
               <th className="text-muted fw-semibold pb-3" style={{ fontSize: '0.8rem' }}>NOMBRE</th>
               <th className="text-muted fw-semibold pb-3 text-end" style={{ width: '180px', fontSize: '0.8rem' }}>ACCIONES</th>
             </tr>
@@ -149,12 +154,20 @@ function TagsManager() {
               <tr>
                 <td colSpan={3} className="text-center text-muted py-5">
                   <div style={{ fontSize: '2rem' }}>🏷️</div>
-                  <div className="mt-2">No hay tags registrados</div>
+                  <div className="mt-2">No hay etiquetas registradas</div>
                 </td>
               </tr>
             ) : tags.map(tag => (
               <tr key={tag.id}>
-                <td className="text-muted small">{tag.id}</td>
+                <td className="text-muted small">
+                  <div className="d-flex align-items-center gap-1">
+                    {tag.id}
+                    <TTSButton
+                      text={`Etiqueta Nombre: ${tag.name}.`}
+                      onClick={(e) => e.stopPropagation()}
+                    />
+                  </div>
+                </td>
                 <td>
                   {editingId === tag.id ? (
                     <Form.Control

@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import BrushStrokes from "../../utils/brushStrokes";
 import { useNavigate } from "react-router-dom";
 import NoticiasRecientes from './NoticiasRecientes';
 import HelpTooltip from '../../components/HelpTooltip';
+import TTSButton from '../../components/TTSButton';
 
 
 function HomePage() {
     const [hoveredCard, setHoveredCard] = useState(null);
     const navigate = useNavigate();
+    const articlesCardRef = useRef(null);
+    const adminCardRef = useRef(null);
 
     return (
         <>
@@ -30,6 +33,7 @@ function HomePage() {
                     <div className='row g-4 mb-5'>
                         <div className="col-12 col-md-6">
                             <div
+                                ref={articlesCardRef}
                                 className="card border-0 shadow-lg h-100 position-relative overflow-hidden"
                                 style={{
                                     borderRadius: '20px',
@@ -41,6 +45,7 @@ function HomePage() {
                                 onMouseEnter={() => setHoveredCard('news')}
                                 onMouseLeave={() => setHoveredCard(null)}
                             >
+                                <TTSButton targetRef={articlesCardRef} className="position-absolute top-0 end-0 m-3" style={{ zIndex: 10 }} />
                                 <div className="position-absolute top-0 end-0 opacity-25">
                                     <BrushStrokes variant="circle" color="#667eea" width={100} height={100} strokeWidth={6} opacity={0.3} />
                                 </div>
@@ -60,7 +65,7 @@ function HomePage() {
                                     </div>
 
                                     <div className="position-relative d-inline-block mb-3">
-                                        <h3 className="card-title h4 fw-bold mb-0">Articulos</h3>
+                                        <h3 className="card-title h4 fw-bold mb-0">Artículos</h3>
                                         <div className="position-absolute" style={{ bottom: '-8px', left: '0' }}>
                                             <BrushStrokes
                                                 variant="underline"
@@ -74,7 +79,7 @@ function HomePage() {
                                     </div>
 
                                     <p className="card-text text-muted mt-4 mb-4">
-                                        Accede a la base de datos de artículos guardados. Busca y filtra información relevantes
+                                        Accede a la base de datos de artículos guardados. Busca y filtra información relevante
                                     </p>
 
                                     <div className="mt-4 text-end">
@@ -86,7 +91,7 @@ function HomePage() {
                                                 transform: hoveredCard === 'news' ? 'translateX(5px)' : 'translateX(0)'
                                             }}
                                         >
-                                            Buscar Articulos
+                                            Buscar Artículos
                                         </span>
                                     </div>
                                 </div>
@@ -97,6 +102,7 @@ function HomePage() {
                         {/* SEGUNDA CARD */}
                         <div className="col-12 col-md-6">
                             <div
+                                ref={adminCardRef}
                                 className="card border-0 shadow-lg h-100 position-relative overflow-hidden"
                                 style={{
                                     borderRadius: '20px',
@@ -108,6 +114,7 @@ function HomePage() {
                                 onMouseEnter={() => setHoveredCard('search')}
                                 onMouseLeave={() => setHoveredCard(null)}
                             >
+                                <TTSButton targetRef={adminCardRef} className="position-absolute top-0 end-0 m-3" style={{ zIndex: 10 }} />
                                 <div className="position-absolute top-0 end-0 opacity-25">
                                     <BrushStrokes variant="circle" color="#5f7e08" width={100} height={100} strokeWidth={6} opacity={0.3} />
                                 </div>
@@ -127,7 +134,7 @@ function HomePage() {
                                     </div>
 
                                     <div className="position-relative d-inline-block mb-3">
-                                        <h3 className="card-title h4 fw-bold mb-0">Admin</h3>
+                                        <h3 className="card-title h4 fw-bold mb-0">Administración</h3>
                                         <div className="position-absolute" style={{ bottom: '-8px', left: '0' }}>
                                             <BrushStrokes
                                                 variant="underline"
@@ -141,7 +148,7 @@ function HomePage() {
                                     </div>
 
                                     <p className="card-text text-muted mt-4 mb-4">
-                                        Pagina de administracion donde el admin puede crear nuevas tags y sources
+                                        Página de administración donde el administrador puede crear nuevas etiquetas y fuentes
                                     </p>
 
                                     <div className="mt-4 text-end">
@@ -153,7 +160,7 @@ function HomePage() {
                                                 transform: hoveredCard === 'search' ? 'translateX(5px)' : 'translateX(0)'
                                             }}
                                         >
-                                            Panel Admin
+                                            Panel de Administración
                                         </span>
                                     </div>
                                 </div>

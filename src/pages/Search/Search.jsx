@@ -20,6 +20,10 @@ function Search() {
   const [actorsMap, setActorsMap] = useState({});
   const [locationsMap, setLocationsMap] = useState({});
 
+  const [sourceNames, setSourceNames] = useState([]);
+  const [coverageLevels, setCoverageLevels] = useState([]);
+  const [authorNames, setAuthorNames] = useState([]);
+
   const [filters, setFilters] = useState({
     publicationDate: {
       startDate: "",
@@ -43,6 +47,24 @@ function Search() {
       .then((data) => {
         console.log(data);
         setData(data);
+
+        const normalizeCoverage = (val) => {
+          if (!val) return "";
+          return val.split('/')
+            .map(p => p.trim().toLowerCase())
+            .map(p => p.charAt(0).toUpperCase() + p.slice(1))
+            .sort()
+            .join(' / ');
+        };
+
+        const uniqueSources = [...new Set(data.map(item => item.sourceName).filter(Boolean))].sort();
+        const uniqueCoverage = [...new Set(data.map(item => normalizeCoverage(item.coverageLevel)).filter(Boolean))].sort();
+        const uniqueAuthors = [...new Set(data.map(item => item.author?.trim()).filter(Boolean))].sort();
+
+        setSourceNames(uniqueSources);
+        setCoverageLevels(uniqueCoverage);
+        setAuthorNames(uniqueAuthors);
+
         setDataIsLoaded(true);
       });
 
@@ -80,7 +102,16 @@ function Search() {
     const sourceName = item.sourceName || "";
     const paywall = item.paywall;
     const author = item.author || "";
-    const coverageLevel = item.coverageLevel || "";
+    
+    const normalizeCoverage = (val) => {
+      if (!val) return "";
+      return val.split('/')
+        .map(p => p.trim().toLowerCase())
+        .map(p => p.charAt(0).toUpperCase() + p.slice(1))
+        .sort()
+        .join(' / ');
+    };
+    const coverageLevel = normalizeCoverage(item.coverageLevel);
 
     const actors = Array.isArray(item.actorsMentioned)
       ? item.actorsMentioned
@@ -122,7 +153,7 @@ function Search() {
     );
   });
 
-  if (!dataIsLoaded) return <div>Loading...</div>;
+  if (!dataIsLoaded) return <div>Cargando...</div>;
 
   return (
     <>
@@ -152,16 +183,20 @@ function Search() {
 
           {/* MAIN CONTAINER */}
           <Container className="app-container mt-4">
-            <h1 className="text-white pb-4">Articulos</h1>
+            <h1 className="text-white pb-4">Artículos</h1>
             <Filters
               filters={filters}
               setFilters={setFilters}
               tagsMap={tagsMap}
               actorsMap={actorsMap}
+              locationsMap={locationsMap}
+              sourceNames={sourceNames}
+              coverageLevels={coverageLevels}
+              authorNames={authorNames}
             />
             <hr />
             <h2>Resultados</h2>
-            <p>Numero de articulos: {filteredData.length}</p>
+            <p>Número de artículos: {filteredData.length}</p>
             <ArticleList
               articles={filteredData}
               actorsMap={actorsMap}

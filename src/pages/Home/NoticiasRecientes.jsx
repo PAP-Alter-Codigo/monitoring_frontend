@@ -72,7 +72,7 @@ export default function NoticiasRecientes() {
                             </button>
                         </div>
 
-                        {!dataIsLoaded && <div>LOADING...</div>}
+                        {!dataIsLoaded && <div>Cargando...</div>}
 
                         {/* News List */}
                         <div className="d-flex flex-column gap-3">

@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/Col';
 import { fetchWithAuth } from '../../utils/fetchWithAuth';
 import ConfirmModal from '../../components/ConfirmModal';
 import ToastNotification from '../../components/ToastNotification';
+import TTSButton from '../../components/TTSButton';
 
 const TYPE_OPTIONS = ['rss', 'HTML'];
 const EMPTY_FORM = { name: '', source_url: '', type: 'rss' };
@@ -124,8 +125,12 @@ function SourceUrlsManager() {
       />
 
       <div className="mb-4 p-4 rounded-3" style={{ background: '#f8f9fa', border: '1px dashed #dee2e6' }}>
-        <h6 className="fw-bold text-muted mb-3 text-uppercase" style={{ fontSize: '0.75rem', letterSpacing: '0.08em' }}>
+        <h6 className="fw-bold text-muted mb-3 text-uppercase d-flex align-items-center gap-2" style={{ fontSize: '0.75rem', letterSpacing: '0.08em' }}>
           Nueva Fuente
+          <TTSButton
+            text="Agrega una nueva fuente de noticias al sistema indicando su nombre, URL y tipo de fuente."
+            onClick={(e) => e.stopPropagation()}
+          />
         </h6>
         <Row className="g-2 align-items-end">
           <Col xs={12} md={3}>
@@ -174,7 +179,7 @@ function SourceUrlsManager() {
         <table className="table table-hover align-middle mb-0">
           <thead>
             <tr className="border-bottom">
-              <th className="text-muted fw-semibold pb-3" style={{ width: '50px', fontSize: '0.8rem' }}>#</th>
+              <th className="text-muted fw-semibold pb-3" style={{ width: '70px', fontSize: '0.8rem' }}>#</th>
               <th className="text-muted fw-semibold pb-3" style={{ fontSize: '0.8rem' }}>NOMBRE</th>
               <th className="text-muted fw-semibold pb-3" style={{ fontSize: '0.8rem' }}>URL</th>
               <th className="text-muted fw-semibold pb-3" style={{ width: '90px', fontSize: '0.8rem' }}>TIPO</th>
@@ -191,7 +196,15 @@ function SourceUrlsManager() {
               </tr>
             ) : sources.map(source => (
               <tr key={source.id}>
-                <td className="text-muted small">{source.id}</td>
+                <td className="text-muted small">
+                  <div className="d-flex align-items-center gap-1">
+                    {source.id}
+                    <TTSButton
+                      text={`Nombre: ${source.name}. URL: ${source.source_url}. Tipo: ${source.type}.`}
+                      onClick={(e) => e.stopPropagation()}
+                    />
+                  </div>
+                </td>
                 <td>
                   {editingId === source.id ? (
                     <Form.Control
@@ -266,5 +279,4 @@ function SourceUrlsManager() {
     </div>
   );
 }
-
 export default SourceUrlsManager;
