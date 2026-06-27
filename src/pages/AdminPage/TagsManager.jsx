@@ -161,11 +161,11 @@ function TagsManager() {
               <tr key={tag.id}>
                 <td className="text-muted small">
                   <div className="d-flex align-items-center gap-1">
-                    {tag.id}
                     <TTSButton
                       text={`Etiqueta Nombre: ${tag.name}.`}
                       onClick={(e) => e.stopPropagation()}
                     />
+                    {tag.id}
                   </div>
                 </td>
                 <td>

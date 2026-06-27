@@ -171,11 +171,6 @@ function ArticleForm() {
 
               {/* Fecha de publicación */}
               <div className="d-flex align-items-center gap-2 mb-2">
-                <Form.Label className="mb-0">
-                  <strong>
-                    Fecha de publicación <span className="required">*</span>
-                  </strong>
-                </Form.Label>
                 <TTSButton
                   text={`Fecha de publicación. Requerido. Formato día, mes, año. ${
                     formData.publicationDate
@@ -183,6 +178,11 @@ function ArticleForm() {
                       : "Está vacío. Ingrese la fecha de publicación."
                   }`}
                 />
+                <Form.Label className="mb-0">
+                  <strong>
+                    Fecha de publicación <span className="required">*</span>
+                  </strong>
+                </Form.Label>
               </div>
               <Form.Control
                 type="text"
@@ -198,11 +198,6 @@ function ArticleForm() {
 
               {/* Encabezado */}
               <div className="d-flex align-items-center gap-2 mb-2 mt-3">
-                <Form.Label className="mb-0">
-                  <strong>
-                    Encabezado <span className="required">*</span>
-                  </strong>
-                </Form.Label>
                 <TTSButton
                   text={`Encabezado. Requerido. Ingrese el título de la nota. ${
                     formData.headline
@@ -210,6 +205,11 @@ function ArticleForm() {
                       : "Está vacío."
                   }`}
                 />
+                <Form.Label className="mb-0">
+                  <strong>
+                    Encabezado <span className="required">*</span>
+                  </strong>
+                </Form.Label>
               </div>
               <Form.Control
                 type="text"
@@ -225,11 +225,6 @@ function ArticleForm() {
 
               {/* Fuente */}
               <div className="d-flex align-items-center gap-2 mb-2 mt-3">
-                <Form.Label className="mb-0">
-                  <strong>
-                    Medio en el que aparece la nota (fuente) <span className="required">*</span>
-                  </strong>
-                </Form.Label>
                 <TTSButton
                   text={`Medio o fuente. Requerido. ${
                     formData.sourceName
@@ -237,6 +232,11 @@ function ArticleForm() {
                       : "Ninguna fuente seleccionada de la lista."
                   }`}
                 />
+                <Form.Label className="mb-0">
+                  <strong>
+                    Medio en el que aparece la nota (fuente) <span className="required">*</span>
+                  </strong>
+                </Form.Label>
               </div>
               {sources.map((val) => (
                 <Form.Check
@@ -256,14 +256,14 @@ function ArticleForm() {
 
               {/* Nivel de cobertura */}
               <div className="d-flex align-items-center gap-2 mb-2 mt-3">
+                <TTSButton
+                  text={`Nivel de cobertura del medio. Requerido. Valor actual: ${formData.coverageLevel}`}
+                />
                 <Form.Label className="mb-0">
                   <strong>
                     Nivel de cobertura del medio <span className="required">*</span>
                   </strong>
                 </Form.Label>
-                <TTSButton
-                  text={`Nivel de cobertura del medio. Requerido. Valor actual: ${formData.coverageLevel}`}
-                />
               </div>
               <Form.Select
                 name="coverageLevel"
@@ -277,11 +277,6 @@ function ArticleForm() {
 
               {/* Autor */}
               <div className="d-flex align-items-center gap-2 mb-2 mt-3">
-                <Form.Label className="mb-0">
-                  <strong>
-                    Autora o autor de la nota <span className="required">*</span>
-                  </strong>
-                </Form.Label>
                 <TTSButton
                   text={`Autora o autor de la nota. Requerido. ${
                     formData.author
@@ -289,6 +284,11 @@ function ArticleForm() {
                       : "Está vacío. Ingrese el nombre del autor."
                   }`}
                 />
+                <Form.Label className="mb-0">
+                  <strong>
+                    Autora o autor de la nota <span className="required">*</span>
+                  </strong>
+                </Form.Label>
               </div>
               <Form.Control
                 type="text"
@@ -304,11 +304,6 @@ function ArticleForm() {
 
               {/* URL */}
               <div className="d-flex align-items-center gap-2 mb-2 mt-3">
-                <Form.Label className="mb-0">
-                  <strong>
-                    Link a la nota <span className="required">*</span>
-                  </strong>
-                </Form.Label>
                 <TTSButton
                   text={`Enlace o link de la nota. Requerido. ${
                     formData.url
@@ -316,6 +311,11 @@ function ArticleForm() {
                       : "Está vacío. Ingrese el enlace de la nota."
                   }`}
                 />
+                <Form.Label className="mb-0">
+                  <strong>
+                    Link a la nota <span className="required">*</span>
+                  </strong>
+                </Form.Label>
               </div>
               <Form.Control
                 type="text"
@@ -331,9 +331,6 @@ function ArticleForm() {
 
               {/* Etiquetas */}
               <div className="d-flex align-items-center gap-2 mb-2 mt-3">
-                <Form.Label className="mb-0">
-                  <strong>Etiquetas</strong>
-                </Form.Label>
                 <TTSButton
                   text={`Etiquetas del artículo. ${
                     formData.tags.length > 0
@@ -341,6 +338,9 @@ function ArticleForm() {
                       : "Ninguna etiqueta seleccionada."
                   }`}
                 />
+                <Form.Label className="mb-0">
+                  <strong>Etiquetas</strong>
+                </Form.Label>
               </div>
               {Object.entries(tagsMap).map(([id, name]) => (
                 <Form.Check
@@ -356,11 +356,6 @@ function ArticleForm() {
 
               {/* Ubicación */}
               <div className="d-flex align-items-center gap-2 mb-2 mt-3">
-                <Form.Label className="mb-0">
-                  <strong>
-                    Ubicación <span className="required">*</span>
-                  </strong>
-                </Form.Label>
                 <TTSButton
                   text={`Ubicación. Requerido. ${
                     formData.location.length > 0
@@ -368,6 +363,11 @@ function ArticleForm() {
                       : "Ninguna ubicación seleccionada."
                   }`}
                 />
+                <Form.Label className="mb-0">
+                  <strong>
+                    Ubicación <span className="required">*</span>
+                  </strong>
+                </Form.Label>
               </div>
               {Object.entries(locationsMap).map(([id, name]) => (
                 <Form.Check
@@ -387,9 +387,6 @@ function ArticleForm() {
 
               {/* Actores Mencionados */}
               <div className="d-flex align-items-center gap-2 mb-2 mt-3">
-                <Form.Label className="mb-0">
-                  <strong>Actores Mencionados</strong>
-                </Form.Label>
                 <TTSButton
                   text={`Actores mencionados. ${
                     formData.actorsMentioned.length > 0
@@ -397,6 +394,9 @@ function ArticleForm() {
                       : "Ningún actor seleccionado."
                   }`}
                 />
+                <Form.Label className="mb-0">
+                  <strong>Actores Mencionados</strong>
+                </Form.Label>
               </div>
               {Object.entries(actorsMap).map(([id, name]) => (
                 <Form.Check

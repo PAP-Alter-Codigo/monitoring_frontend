@@ -198,11 +198,11 @@ function SourceUrlsManager() {
               <tr key={source.id}>
                 <td className="text-muted small">
                   <div className="d-flex align-items-center gap-1">
-                    {source.id}
                     <TTSButton
                       text={`Nombre: ${source.name}. URL: ${source.source_url}. Tipo: ${source.type}.`}
                       onClick={(e) => e.stopPropagation()}
                     />
+                    {source.id}
                   </div>
                 </td>
                 <td>

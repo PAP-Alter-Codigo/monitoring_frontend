@@ -47,10 +47,10 @@ function Filters({ filters, setFilters, tagsMap, actorsMap, locationsMap, source
       <Row>
         <Col md={6}>
           <div className="d-flex align-items-center gap-2 mb-1">
+            <TTSButton text={`Fecha de inicio para búsqueda de artículos. ${filters.publicationDate.startDate ? `Valor actual: ${filters.publicationDate.startDate}` : "Vacía."}`} />
             <Form.Label className="mb-0 text-white">
               <strong style={{ color: 'black' }}>Fecha de inicio:</strong>
             </Form.Label>
-            <TTSButton text={`Fecha de inicio para búsqueda de artículos. ${filters.publicationDate.startDate ? `Valor actual: ${filters.publicationDate.startDate}` : "Vacía."}`} />
           </div>
           <Form.Control
             type="date"
@@ -60,10 +60,10 @@ function Filters({ filters, setFilters, tagsMap, actorsMap, locationsMap, source
         </Col>
         <Col md={6}>
           <div className="d-flex align-items-center gap-2 mb-1">
+            <TTSButton text={`Fecha de fin para búsqueda de artículos. ${filters.publicationDate.endDate ? `Valor actual: ${filters.publicationDate.endDate}` : "Vacía."}`} />
             <Form.Label className="mb-0 text-white">
               <strong style={{ color: 'black' }}>Fecha de fin:</strong>
             </Form.Label>
-            <TTSButton text={`Fecha de fin para búsqueda de artículos. ${filters.publicationDate.endDate ? `Valor actual: ${filters.publicationDate.endDate}` : "Vacía."}`} />
           </div>
           <Form.Control
             type="date"
@@ -75,10 +75,10 @@ function Filters({ filters, setFilters, tagsMap, actorsMap, locationsMap, source
       <Row className="mt-2">
         <Col md={4}>
           <div className="d-flex align-items-center gap-2 mb-1">
+            <TTSButton text={`Buscar por título. ${filters.headline ? `Buscando: ${filters.headline}` : "Vacío."}`} />
             <Form.Label className="mb-0 text-white">
               <strong style={{ color: 'black' }}>Título:</strong>
             </Form.Label>
-            <TTSButton text={`Buscar por título. ${filters.headline ? `Buscando: ${filters.headline}` : "Vacío."}`} />
           </div>
           <Form.Control
             name="headline"
@@ -89,10 +89,10 @@ function Filters({ filters, setFilters, tagsMap, actorsMap, locationsMap, source
         </Col>
         <Col md={4}>
           <div className="d-flex align-items-center gap-2 mb-1">
+            <TTSButton text={`Filtrar por autor. ${filters.author ? `Seleccionado: ${filters.author}` : "Cualquier autor."}`} />
             <Form.Label className="mb-0 text-white">
               <strong style={{ color: 'black' }}>Autor:</strong>
             </Form.Label>
-            <TTSButton text={`Filtrar por autor. ${filters.author ? `Seleccionado: ${filters.author}` : "Cualquier autor."}`} />
           </div>
           <Form.Select
             name="author"
@@ -107,10 +107,10 @@ function Filters({ filters, setFilters, tagsMap, actorsMap, locationsMap, source
         </Col>
         <Col md={4}>
           <div className="d-flex align-items-center gap-2 mb-1">
+            <TTSButton text={`Filtrar por nombre de la fuente. ${filters.sourceName ? `Seleccionada: ${filters.sourceName}` : "Cualquier fuente."}`} />
             <Form.Label className="mb-0 text-white">
               <strong style={{ color: 'black' }}>Fuente:</strong>
             </Form.Label>
-            <TTSButton text={`Filtrar por nombre de la fuente. ${filters.sourceName ? `Seleccionada: ${filters.sourceName}` : "Cualquier fuente."}`} />
           </div>
           <Form.Select
             name="sourceName"
@@ -127,10 +127,10 @@ function Filters({ filters, setFilters, tagsMap, actorsMap, locationsMap, source
       <Row className="mt-2">
         <Col md={3}>
           <div className="d-flex align-items-center gap-2 mb-1">
+            <TTSButton text={`Filtrar por ubicación. ${filters.location ? `Seleccionada: ${filters.location}` : "Cualquier ubicación."}`} />
             <Form.Label className="mb-0 text-white">
               <strong style={{ color: 'black' }}>Ubicación:</strong>
             </Form.Label>
-            <TTSButton text={`Filtrar por ubicación. ${filters.location ? `Seleccionada: ${filters.location}` : "Cualquier ubicación."}`} />
           </div>
           <Form.Select
             name="location"
@@ -145,10 +145,10 @@ function Filters({ filters, setFilters, tagsMap, actorsMap, locationsMap, source
         </Col>
         <Col md={3}>
           <div className="d-flex align-items-center gap-2 mb-1">
+            <TTSButton text={`Filtrar por nivel de cobertura. ${filters.coverageLevel ? `Seleccionado: ${filters.coverageLevel}` : "Cualquier cobertura."}`} />
             <Form.Label className="mb-0 text-white">
               <strong style={{ color: 'black' }}>Cobertura:</strong>
             </Form.Label>
-            <TTSButton text={`Filtrar por nivel de cobertura. ${filters.coverageLevel ? `Seleccionado: ${filters.coverageLevel}` : "Cualquier cobertura."}`} />
           </div>
           <Form.Select
             name="coverageLevel"
@@ -163,10 +163,10 @@ function Filters({ filters, setFilters, tagsMap, actorsMap, locationsMap, source
         </Col>
         <Col md={3}>
           <div className="d-flex align-items-center gap-2 mb-1">
+            <TTSButton text={`Filtrar por paywall. ${filters.paywall === null ? "Cualquiera" : filters.paywall ? "Sólo con paywall" : "Sólo sin paywall"}`} />
             <Form.Label className="mb-0 text-white">
               <strong style={{ color: 'black' }}>Paywall:</strong>
             </Form.Label>
-            <TTSButton text={`Filtrar por paywall. ${filters.paywall === null ? "Cualquiera" : filters.paywall ? "Sólo con paywall" : "Sólo sin paywall"}`} />
           </div>
           <Form.Select name="paywall" value={filters.paywall !== null ? String(filters.paywall) : ""} onChange={handlePaywallChange}>
             <option value="">Cualquiera</option>
@@ -176,10 +176,10 @@ function Filters({ filters, setFilters, tagsMap, actorsMap, locationsMap, source
         </Col>
         <Col md={3}>
           <div className="d-flex align-items-center gap-2 mb-1">
+            <TTSButton text={`Filtrar por origen del artículo. ${filters.origin ? `Origen: ${filters.origin}` : "Cualquier origen."}`} />
             <Form.Label className="mb-0 text-white">
               <strong style={{ color: 'black' }}>Origen:</strong>
             </Form.Label>
-            <TTSButton text={`Filtrar por origen del artículo. ${filters.origin ? `Origen: ${filters.origin}` : "Cualquier origen."}`} />
           </div>
           <Form.Select name="origin" value={filters.origin} onChange={handleInputChange}>
             <option value="">Cualquiera</option>

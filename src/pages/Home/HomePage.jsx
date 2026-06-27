@@ -49,6 +49,7 @@ function HomePage() {
                                 <div className="position-absolute top-0 end-0 opacity-25">
                                     <BrushStrokes variant="circle" color="#667eea" width={100} height={100} strokeWidth={6} opacity={0.3} />
                                 </div>
+                                <TTSButton targetRef={articlesCardRef} className="position-absolute top-0 end-0 m-3" style={{ zIndex: 10 }} />
 
                                 <div className="card-body p-4 p-md-5 position-relative">
                                     <div className="mb-4">
@@ -118,6 +119,7 @@ function HomePage() {
                                 <div className="position-absolute top-0 end-0 opacity-25">
                                     <BrushStrokes variant="circle" color="#5f7e08" width={100} height={100} strokeWidth={6} opacity={0.3} />
                                 </div>
+                                <TTSButton targetRef={adminCardRef} className="position-absolute top-0 end-0 m-3" style={{ zIndex: 10 }} />
 
                                 <div className="card-body p-4 p-md-5 position-relative">
                                     <div className="mb-4">

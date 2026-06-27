@@ -93,6 +93,7 @@ function ArticleList({ articles, actorsMap, tagsMap, locationsMap }) {
                                         </div>
                                         <Card.Body className="d-flex flex-column">
                                             <Card.Title className="d-flex justify-content-between align-items-start gap-2">
+                                                <TTSButton selector={`#article-card-${item.id}`} className="flex-shrink-0" />
                                                 <a href={item.url || '#'}>{item.headline}</a>
                                                 <TTSButton selector={`#article-card-${item.id}`} className="flex-shrink-0" />
                                             </Card.Title>

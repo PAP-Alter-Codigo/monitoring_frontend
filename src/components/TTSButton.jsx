@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './TTSButton.css';
+import speakerIcon from '../assets/speaker.jpg';
 
 function TTSButton({ text, targetRef, selector, lang = 'es-ES', className = '', style = {} }) {
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -78,9 +79,12 @@ function TTSButton({ text, targetRef, selector, lang = 'es-ES', className = '', 
       aria-label={isSpeaking ? "Detener lectura de voz" : "Escuchar este recuadro en voz alta"}
     >
       {isSpeaking ? (
-        <span className="tts-icon">⏹️</span>
+        <svg className="tts-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+          <rect x="7" y="4" width="2" height="16" rx="0.5"/>
+          <rect x="15" y="4" width="2" height="16" rx="0.5"/>
+        </svg>
       ) : (
-        <span className="tts-icon">🔊</span>
+        <img src={speakerIcon} alt="Play" className="tts-icon" style={{ width: '20px', height: '20px' }} />
       )}
     </button>
   );

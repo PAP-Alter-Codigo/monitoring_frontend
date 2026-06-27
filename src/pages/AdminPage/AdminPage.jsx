@@ -106,11 +106,11 @@ function AdminPage() {
                             <span className="fs-3">📝</span>
                         </div>
                         <div className="flex-grow-1">
-                            <h5 className="mb-1 fw-bold"> Alta de Artículos
+                            <h5 className="mb-1 fw-bold">
                                 <TTSButton
                                     text={`Ingresa nuevos artículos periodísticos al sistema de monitoreo de manera manual.`}
                                     onClick={(e) => e.stopPropagation()}
-                                />
+                                /> Alta de Artículos
                             </h5>
                             <p className="mb-0 text-muted small">
                                 Ingresa nuevos artículos periodísticos al
