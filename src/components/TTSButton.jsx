@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import './TTSButton.css';
 import speakerIcon from '../assets/speaker.jpg';
 
@@ -69,24 +70,36 @@ function TTSButton({ text, targetRef, selector, lang = 'es-ES', className = '', 
     window.speechSynthesis.speak(utterance);
   };
 
+  const renderTooltip = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      <span style={{ fontSize: '1.1rem', fontWeight: 500, padding: '2px 6px' }}>Escuchar</span>
+    </Tooltip>
+  );
+
   return (
-    <button
-      type="button"
-      className={`tts-btn ${isSpeaking ? 'speaking' : ''} ${className}`}
-      style={style}
-      onClick={handleSpeak}
-      title={isSpeaking ? "Detener lectura" : "Escuchar contenido"}
-      aria-label={isSpeaking ? "Detener lectura de voz" : "Escuchar este recuadro en voz alta"}
+    <OverlayTrigger
+      placement="top"
+      delay={{ show: 200, hide: 400 }}
+      overlay={renderTooltip}
     >
-      {isSpeaking ? (
-        <svg className="tts-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-          <rect x="7" y="4" width="2" height="16" rx="0.5"/>
-          <rect x="15" y="4" width="2" height="16" rx="0.5"/>
-        </svg>
-      ) : (
-        <img src={speakerIcon} alt="Play" className="tts-icon" style={{ width: '20px', height: '20px' }} />
-      )}
-    </button>
+      <button
+        type="button"
+        className={`tts-btn ${isSpeaking ? 'speaking' : ''} ${className}`}
+        style={style}
+        onClick={handleSpeak}
+        title={isSpeaking ? "Detener lectura" : ""}
+        aria-label={isSpeaking ? "Detener lectura de voz" : "Escuchar este recuadro en voz alta"}
+      >
+        {isSpeaking ? (
+          <svg className="tts-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+            <rect x="7" y="4" width="2" height="16" rx="0.5"/>
+            <rect x="15" y="4" width="2" height="16" rx="0.5"/>
+          </svg>
+        ) : (
+          <img src={speakerIcon} alt="Play" className="tts-icon" style={{ width: '20px', height: '20px' }} />
+        )}
+      </button>
+    </OverlayTrigger>
   );
 }
 
