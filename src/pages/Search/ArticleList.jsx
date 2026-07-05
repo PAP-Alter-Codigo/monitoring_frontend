@@ -74,8 +74,8 @@ function ArticleList({ articles, actorsMap, tagsMap, locationsMap }) {
                             const originColor = origin === 'muninn' ? '#722294' : '#60CC7D';
                             const originLabel =
                                 origin === 'muninn' ? 'Muninn'
-                                : origin === 'user' ? 'Usuario'
-                                : origin || 'N/A';
+                                    : origin === 'user' ? 'Usuario'
+                                        : origin || 'N/A';
 
                             return (
                                 <Col key={item.id} className="d-flex">
@@ -99,41 +99,61 @@ function ArticleList({ articles, actorsMap, tagsMap, locationsMap }) {
                                             <Card.Text>
                                                 <strong>Autor:</strong> {item.author || 'N/A'}
                                             </Card.Text>
-                                            <Card.Text>
-                                                <strong>Fecha de Publicación:</strong> {item.publicationDate || 'N/A'}
-                                            </Card.Text>
-                                            <Card.Text>
-                                                <strong>Nombre de la Fuente:</strong> {item.sourceName || 'N/A'}
-                                            </Card.Text>
-                                            <Card.Text>
-                                                <strong>¿De Pago?:</strong> {item.paywall === true ? 'Sí' : item.paywall === false ? 'No' : 'N/A'}
-                                            </Card.Text>
-                                            <Card.Text>
-                                                <strong>Nivel de Cobertura:</strong> {item.coverageLevel || 'N/A'}
-                                            </Card.Text>
+                                            {item.publicationDate && (
+                                                <Card.Text>
+                                                    <strong>Fecha de Publicación:</strong> {item.publicationDate}
+                                                </Card.Text>
+                                            )}
+                                            {item.sourceName && (
+                                                <Card.Text>
+                                                    <strong>Nombre de la Fuente:</strong> {item.sourceName}
+                                                </Card.Text>
+                                            )}
+                                            {item.paywall !== null && (
+                                                <Card.Text>
+                                                    <strong>¿De Pago?:</strong> {item.paywall === true ? 'Sí' : 'No'}
+                                                </Card.Text>
+                                            )}
+                                            {item.coverageLevel && (
+                                                <Card.Text>
+                                                    <strong>Nivel de Cobertura:</strong> {/* normalize coverage level with capital first letter */item.coverageLevel.charAt(0).toUpperCase() + item.coverageLevel.slice(1)}
+                                                </Card.Text>
+                                            )}
                                             {item.summary && (
                                                 <Card.Text>
                                                     <strong>Resumen:</strong> {item.summary}
                                                 </Card.Text>
                                             )}
-                                            <Card.Text>
-                                                <strong>Actores Mencionados:</strong>{' '}
-                                                {Array.isArray(item.actorsMentioned)
-                                                    ? item.actorsMentioned.map((id) => actorsMap[id] || id).join(', ')
-                                                    : 'N/A'}
-                                            </Card.Text>
-                                            <Card.Text>
-                                                <strong>Etiquetas:</strong>{' '}
-                                                {Array.isArray(item.tags)
-                                                    ? item.tags.map((id) => tagsMap[id] || id).join(', ')
-                                                    : 'N/A'}
-                                            </Card.Text>
-                                            <Card.Text>
-                                                <strong>Ubicación:</strong>{' '}
-                                                {Array.isArray(item.location) && item.location.length > 0
-                                                    ? item.location.map((loc) => loc.name).join(', ')
-                                                    : 'N/A'}
-                                            </Card.Text>
+                                            {Array.isArray(item.actorsMentioned) && item.actorsMentioned.length > 0 && (
+                                                <Card.Text>
+                                                    <strong>Actores Mencionados:</strong>{' '}
+                                                    {item.actorsMentioned.map((id) => actorsMap[id] || id).join(', ')}
+                                                </Card.Text>
+                                            )}
+                                            {Array.isArray(item.tags) && item.tags.length > 0 && (
+                                                <Card.Text>
+                                                    <strong>Etiquetas:</strong>{' '}
+                                                    <div className="d-flex flex-wrap gap-2">
+                                                        {item.tags.map((id) => (
+                                                            <span key={id} className="badge rounded-pill" style={{ background: 'rgba(108,117,125,0.15)', color: '#6c757d' }}>
+                                                                {tagsMap[id] || id}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                </Card.Text>
+                                            )}
+                                            {Array.isArray(item.location) && item.location.length > 0 && (
+                                                <Card.Text>
+                                                    <strong>Ubicación:</strong>{' '}
+                                                    <div className="d-flex flex-wrap gap-2">
+                                                        {item.location.map((loc) => (
+                                                            <span key={loc.id || loc.name} className="badge rounded-pill" style={{ background: 'rgba(108,117,125,0.15)', color: '#6c757d' }}>
+                                                                {loc.name}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                </Card.Text>
+                                            )}
                                         </Card.Body>
                                     </Card>
                                 </Col>
