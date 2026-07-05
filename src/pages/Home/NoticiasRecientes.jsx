@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import BrushStrokes from "../../utils/brushStrokes";
 import { useNavigate } from "react-router-dom";
 import { fetchWithAuth } from "../../utils/fetchWithAuth";
+import LoadingSkeleton from "../../components/LoadingSkeleton";
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -75,7 +76,7 @@ export default function NoticiasRecientes() {
                             </button>
                         </div>
 
-                        {!dataIsLoaded && <div>Cargando...</div>}
+                        {!dataIsLoaded && <LoadingSkeleton variant="inline" />}
 
                         {/* News List */}
                         <div className="d-flex flex-column gap-3">
