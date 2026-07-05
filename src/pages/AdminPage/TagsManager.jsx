@@ -144,7 +144,7 @@ function TagsManager() {
         <table className="table table-hover align-middle mb-0">
           <thead>
             <tr className="border-bottom">
-              <th className="text-muted fw-semibold pb-3" style={{ width: '80px', fontSize: '0.8rem' }}>#</th>
+              {/* <th className="text-muted fw-semibold pb-3" style={{ width: '80px', fontSize: '0.8rem' }}>#</th> */}
               <th className="text-muted fw-semibold pb-3" style={{ fontSize: '0.8rem' }}>NOMBRE</th>
               <th className="text-muted fw-semibold pb-3 text-end" style={{ width: '180px', fontSize: '0.8rem' }}>ACCIONES</th>
             </tr>
@@ -152,22 +152,13 @@ function TagsManager() {
           <tbody>
             {tags.length === 0 ? (
               <tr>
-                <td colSpan={3} className="text-center text-muted py-5">
+                <td colSpan={2} className="text-center text-muted py-5">
                   <div style={{ fontSize: '2rem' }}>🏷️</div>
                   <div className="mt-2">No hay etiquetas registradas</div>
                 </td>
               </tr>
             ) : tags.map(tag => (
               <tr key={tag.id}>
-                <td className="text-muted small">
-                  <div className="d-flex align-items-center gap-1">
-                    <TTSButton
-                      text={`Etiqueta Nombre: ${tag.name}.`}
-                      onClick={(e) => e.stopPropagation()}
-                    />
-                    {tag.id}
-                  </div>
-                </td>
                 <td>
                   {editingId === tag.id ? (
                     <Form.Control
@@ -182,7 +173,13 @@ function TagsManager() {
                       style={{ maxWidth: '320px' }}
                     />
                   ) : (
-                    <span className="fw-medium">{tag.name}</span>
+                    <div className="d-flex align-items-center gap-2">
+                      <TTSButton
+                        text={`Etiqueta Nombre: ${tag.name}.`}
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                      <span className="fw-medium">{tag.name}</span>
+                    </div>
                   )}
                 </td>
                 <td className="text-end">
