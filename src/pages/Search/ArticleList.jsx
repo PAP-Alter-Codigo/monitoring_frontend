@@ -3,6 +3,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { parseDate } from '../../utils/parseDate';
 import TTSButton from '../../components/TTSButton';
+import './ArticleList.css';
 
 const MONTHS_ES = [
     'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
@@ -128,23 +129,22 @@ function ArticleList({ articles, actorsMap, tagsMap, locationsMap }) {
                                             </div>
 
                                             {/* metadata row with columns */}
-                                            <div style={{
+                                            <div className="metadata-grid" style={{
                                                 display: 'grid',
-                                                gridTemplateColumns: 'repeat(auto-fit, minmax(80px, 1fr))',
                                                 gap: '8px',
                                                 fontSize: '0.8rem',
                                                 color: '#6c757d',
                                                 padding: '8px 0'
                                             }}>
                                                 {/* autor */}
-                                                <div style={{ textAlign: 'center' }}>
+                                                <div className="metadata-item">
                                                     <div style={{ fontSize: '0.75rem', fontWeight: 600, marginBottom: '4px' }}>Autor</div>
                                                     <div style={{ fontSize: '0.85rem', fontWeight: 500, color: '#333' }}>{item.author || 'N/A'}</div>
                                                 </div>
 
                                                 {/* fecha */}
                                                 {item.publicationDate && (
-                                                    <div style={{ textAlign: 'center' }}>
+                                                    <div className="metadata-item">
                                                         <div style={{ fontSize: '0.75rem', fontWeight: 600, marginBottom: '4px' }}>Fecha</div>
                                                         <div style={{ fontSize: '0.85rem', fontWeight: 500, color: '#333' }}>{item.publicationDate}</div>
                                                     </div>
@@ -152,7 +152,7 @@ function ArticleList({ articles, actorsMap, tagsMap, locationsMap }) {
 
                                                 {/* fuente */}
                                                 {item.sourceName && (
-                                                    <div style={{ textAlign: 'center' }}>
+                                                    <div className="metadata-item">
                                                         <div style={{ fontSize: '0.75rem', fontWeight: 600, marginBottom: '4px' }}>Fuente</div>
                                                         <div style={{ fontSize: '0.85rem', fontWeight: 500, color: '#333' }}>{item.sourceName}</div>
                                                     </div>
@@ -160,7 +160,7 @@ function ArticleList({ articles, actorsMap, tagsMap, locationsMap }) {
 
                                                 {/* cobertura */}
                                                 {item.coverageLevel && (
-                                                    <div style={{ textAlign: 'center' }}>
+                                                    <div className="metadata-item">
                                                         <div style={{ fontSize: '0.75rem', fontWeight: 600, marginBottom: '4px' }}>Cobertura</div>
                                                         <div style={{ fontSize: '0.85rem', fontWeight: 500, color: '#333' }}>{item.coverageLevel.charAt(0).toUpperCase() + item.coverageLevel.slice(1)}</div>
                                                     </div>
@@ -168,7 +168,7 @@ function ArticleList({ articles, actorsMap, tagsMap, locationsMap }) {
 
                                                 {/* paywall */}
                                                 {item.paywall !== null && (
-                                                    <div style={{ textAlign: 'center' }}>
+                                                    <div className="metadata-item">
                                                         <div style={{ fontSize: '0.75rem', fontWeight: 600, marginBottom: '4px' }}>¿De pago?</div>
                                                         <div style={{ fontSize: '0.85rem', fontWeight: 500, color: '#333' }}>
                                                             {item.paywall ? 'Sí' : 'No'}
