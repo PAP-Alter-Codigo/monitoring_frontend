@@ -53,7 +53,7 @@ function ArticleList({ articles, actorsMap, tagsMap, locationsMap }) {
                     <div className="d-flex align-items-center gap-3 mb-3">
                         <span
                             className="text-capitalize fw-bold"
-                            style={{ fontSize: '1rem', color: '#191654', whiteSpace: 'nowrap' }}
+                            style={{ fontSize: 'var(--fs-lg)', color: '#191654', whiteSpace: 'nowrap' }}
                         >
                             {key}
                         </span>
@@ -63,7 +63,7 @@ function ArticleList({ articles, actorsMap, tagsMap, locationsMap }) {
                         />
                         <span
                             className="badge rounded-pill"
-                            style={{ background: 'rgba(102,126,234,0.15)', color: '#667eea', fontSize: '0.75rem' }}
+                            style={{ background: 'rgba(102,126,234,0.15)', color: '#667eea', fontSize: 'var(--fs-xs)' }}
                         >
                             {groupArticles.length}
                         </span>
@@ -98,7 +98,7 @@ function ArticleList({ articles, actorsMap, tagsMap, locationsMap }) {
                                             <div style={{
                                                 backgroundColor: originColor,
                                                 color: '#fff',
-                                                fontSize: '0.75rem',
+                                                fontSize: 'var(--fs-sm)',
                                                 fontWeight: 600,
                                                 padding: '4px 12px',
                                                 letterSpacing: '0.05em',
@@ -112,11 +112,11 @@ function ArticleList({ articles, actorsMap, tagsMap, locationsMap }) {
                                             {/* headline */}
                                             <div className="d-flex justify-content-between align-items-start gap-2">
                                                 <a href={item.url || '#'} target="_blank" rel="noopener noreferrer" style={{
-                                                    fontSize: '1.1rem',
+                                                    fontSize: 'var(--fs-xl)',
                                                     fontWeight: 700,
                                                     color: '#0066cc',
                                                     textDecoration: 'none',
-                                                    lineHeight: '1.4',
+                                                    lineHeight: 'var(--lh-tight)',
                                                     display: '-webkit-box',
                                                     WebkitLineClamp: 2,
                                                     WebkitBoxOrient: 'vertical',
@@ -132,45 +132,45 @@ function ArticleList({ articles, actorsMap, tagsMap, locationsMap }) {
                                             <div className="metadata-grid" style={{
                                                 display: 'grid',
                                                 gap: '8px',
-                                                fontSize: '0.8rem',
+                                                fontSize: 'var(--fs-sm)',
                                                 color: '#6c757d',
                                                 padding: '8px 0'
                                             }}>
                                                 {/* autor */}
                                                 <div className="metadata-item">
-                                                    <div style={{ fontSize: '0.75rem', fontWeight: 600, marginBottom: '4px' }}>Autor</div>
-                                                    <div style={{ fontSize: '0.85rem', fontWeight: 500, color: '#333' }}>{item.author || 'N/A'}</div>
+                                                    <div style={{ fontSize: 'var(--fs-xs)', fontWeight: 600, marginBottom: '4px' }}>Autor</div>
+                                                    <div style={{ fontSize: 'var(--fs-sm)', fontWeight: 500, color: '#333' }}>{item.author || 'N/A'}</div>
                                                 </div>
 
                                                 {/* fecha */}
                                                 {item.publicationDate && (
                                                     <div className="metadata-item">
-                                                        <div style={{ fontSize: '0.75rem', fontWeight: 600, marginBottom: '4px' }}>Fecha</div>
-                                                        <div style={{ fontSize: '0.85rem', fontWeight: 500, color: '#333' }}>{item.publicationDate}</div>
+                                                        <div style={{ fontSize: 'var(--fs-xs)', fontWeight: 600, marginBottom: '4px' }}>Fecha</div>
+                                                        <div style={{ fontSize: 'var(--fs-sm)', fontWeight: 500, color: '#333' }}>{item.publicationDate}</div>
                                                     </div>
                                                 )}
 
                                                 {/* fuente */}
                                                 {item.sourceName && (
                                                     <div className="metadata-item">
-                                                        <div style={{ fontSize: '0.75rem', fontWeight: 600, marginBottom: '4px' }}>Fuente</div>
-                                                        <div style={{ fontSize: '0.85rem', fontWeight: 500, color: '#333' }}>{item.sourceName}</div>
+                                                        <div style={{ fontSize: 'var(--fs-xs)', fontWeight: 600, marginBottom: '4px' }}>Fuente</div>
+                                                        <div style={{ fontSize: 'var(--fs-sm)', fontWeight: 500, color: '#333' }}>{item.sourceName}</div>
                                                     </div>
                                                 )}
 
                                                 {/* cobertura */}
                                                 {item.coverageLevel && (
                                                     <div className="metadata-item">
-                                                        <div style={{ fontSize: '0.75rem', fontWeight: 600, marginBottom: '4px' }}>Cobertura</div>
-                                                        <div style={{ fontSize: '0.85rem', fontWeight: 500, color: '#333' }}>{item.coverageLevel.charAt(0).toUpperCase() + item.coverageLevel.slice(1)}</div>
+                                                        <div style={{ fontSize: 'var(--fs-xs)', fontWeight: 600, marginBottom: '4px' }}>Cobertura</div>
+                                                        <div style={{ fontSize: 'var(--fs-sm)', fontWeight: 500, color: '#333' }}>{item.coverageLevel.charAt(0).toUpperCase() + item.coverageLevel.slice(1)}</div>
                                                     </div>
                                                 )}
 
                                                 {/* paywall */}
                                                 {item.paywall !== null && (
                                                     <div className="metadata-item">
-                                                        <div style={{ fontSize: '0.75rem', fontWeight: 600, marginBottom: '4px' }}>¿De pago?</div>
-                                                        <div style={{ fontSize: '0.85rem', fontWeight: 500, color: '#333' }}>
+                                                        <div style={{ fontSize: 'var(--fs-xs)', fontWeight: 600, marginBottom: '4px' }}>¿De pago?</div>
+                                                        <div style={{ fontSize: 'var(--fs-sm)', fontWeight: 500, color: '#333' }}>
                                                             {item.paywall ? 'Sí' : 'No'}
                                                         </div>
                                                     </div>
@@ -181,9 +181,9 @@ function ArticleList({ articles, actorsMap, tagsMap, locationsMap }) {
                                             {item.summary && (
                                                 <p style={{
                                                     margin: 0,
-                                                    fontSize: '0.95rem',
+                                                    fontSize: 'var(--fs-base)',
                                                     color: '#555',
-                                                    lineHeight: '1.5',
+                                                    lineHeight: 'var(--lh-normal)',
                                                     display: '-webkit-box',
                                                     WebkitLineClamp: 3,
                                                     WebkitBoxOrient: 'vertical',
@@ -199,12 +199,12 @@ function ArticleList({ articles, actorsMap, tagsMap, locationsMap }) {
                                             {/* actors */}
                                             {Array.isArray(item.actorsMentioned) && item.actorsMentioned.length > 0 && (
                                                 <div>
-                                                    <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#555', marginBottom: '6px' }}>
+                                                    <div style={{ fontSize: 'var(--fs-sm)', fontWeight: 600, color: '#555', marginBottom: '6px' }}>
                                                         Actores Mencionados
                                                     </div>
                                                     <div className="d-flex flex-wrap gap-2">
                                                         {item.actorsMentioned.map((id) => (
-                                                            <span key={id} className="badge rounded-pill" style={{ background: 'rgba(108,117,125,0.15)', color: '#6c757d', fontSize: '0.8rem' }}>
+                                                            <span key={id} className="badge rounded-pill" style={{ background: 'rgba(108,117,125,0.15)', color: '#6c757d', fontSize: 'var(--fs-sm)' }}>
                                                                 {actorsMap[id] || id}
                                                             </span>
                                                         ))}
@@ -215,12 +215,12 @@ function ArticleList({ articles, actorsMap, tagsMap, locationsMap }) {
                                             {/* tags */}
                                             {Array.isArray(item.tags) && item.tags.length > 0 && (
                                                 <div>
-                                                    <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#555', marginBottom: '6px' }}>
+                                                    <div style={{ fontSize: 'var(--fs-sm)', fontWeight: 600, color: '#555', marginBottom: '6px' }}>
                                                         Etiquetas
                                                     </div>
                                                     <div className="d-flex flex-wrap gap-2">
                                                         {item.tags.map((id) => (
-                                                            <span key={id} className="badge rounded-pill" style={{ background: 'rgba(108,117,125,0.15)', color: '#6c757d', fontSize: '0.8rem' }}>
+                                                            <span key={id} className="badge rounded-pill" style={{ background: 'rgba(108,117,125,0.15)', color: '#6c757d', fontSize: 'var(--fs-sm)' }}>
                                                                 {tagsMap[id] || id}
                                                             </span>
                                                         ))}
@@ -231,12 +231,12 @@ function ArticleList({ articles, actorsMap, tagsMap, locationsMap }) {
                                             {/* locations */}
                                             {Array.isArray(item.location) && item.location.length > 0 && (
                                                 <div>
-                                                    <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#555', marginBottom: '6px' }}>
+                                                    <div style={{ fontSize: 'var(--fs-sm)', fontWeight: 600, color: '#555', marginBottom: '6px' }}>
                                                         Ubicación
                                                     </div>
                                                     <div className="d-flex flex-wrap gap-2">
                                                         {item.location.map((loc) => (
-                                                            <span key={loc.id || loc.name} className="badge rounded-pill" style={{ background: 'rgba(108,117,125,0.15)', color: '#6c757d', fontSize: '0.8rem' }}>
+                                                            <span key={loc.id || loc.name} className="badge rounded-pill" style={{ background: 'rgba(108,117,125,0.15)', color: '#6c757d', fontSize: 'var(--fs-sm)' }}>
                                                                 {loc.name}
                                                             </span>
                                                         ))}
