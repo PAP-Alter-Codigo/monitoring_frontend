@@ -82,11 +82,17 @@ function TTSButton({ text, targetRef, selector, lang = 'es-ES', className = '', 
       delay={{ show: 200, hide: 400 }}
       overlay={renderTooltip}
     >
-      <button
-        type="button"
+      <span
+        role="button"
+        tabIndex={0}
         className={`tts-btn ${isSpeaking ? 'speaking' : ''} ${className}`}
         style={style}
         onClick={handleSpeak}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            handleSpeak(e);
+          }
+        }}
         title={isSpeaking ? "Detener lectura" : ""}
         aria-label={isSpeaking ? "Detener lectura de voz" : "Escuchar este recuadro en voz alta"}
       >
@@ -98,7 +104,7 @@ function TTSButton({ text, targetRef, selector, lang = 'es-ES', className = '', 
         ) : (
           <img src={speakerIcon} alt="Play" className="tts-icon" style={{ width: '20px', height: '20px' }} />
         )}
-      </button>
+      </span>
     </OverlayTrigger>
   );
 }
