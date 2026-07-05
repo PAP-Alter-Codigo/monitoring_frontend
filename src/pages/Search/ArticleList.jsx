@@ -79,80 +79,169 @@ function ArticleList({ articles, actorsMap, tagsMap, locationsMap }) {
 
                             return (
                                 <Col key={item.id} className="d-flex">
-                                    <Card id={`article-card-${item.id}`} className="w-100 d-flex flex-column" style={{ overflow: 'hidden' }}>
-                                        <div style={{
-                                            backgroundColor: originColor,
-                                            color: '#fff',
-                                            fontSize: '0.75rem',
-                                            fontWeight: 600,
-                                            padding: '4px 12px',
-                                            letterSpacing: '0.05em',
-                                            textTransform: 'uppercase',
-                                        }}>
-                                            {originLabel}
-                                        </div>
-                                        <Card.Body className="d-flex flex-column">
-                                            <Card.Title className="d-flex justify-content-between align-items-start gap-2">
-                                                <a href={item.url || '#'} target="_blank" rel="noopener noreferrer">{item.headline}</a>
+                                    <Card id={`article-card-${item.id}`} className="w-100 d-flex flex-column" style={{
+                                        overflow: 'hidden',
+                                        transition: 'box-shadow 0.3s ease, transform 0.3s ease',
+                                        cursor: 'pointer'
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.boxShadow = '0 8px 16px rgba(0,0,0,0.15)';
+                                        e.currentTarget.style.transform = 'scale(1.02)';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.boxShadow = '';
+                                        e.currentTarget.style.transform = 'scale(1)';
+                                    }}>
+                                        {/* origin badge header */}
+                                        {(origin === 'muninn' || origin === 'user') && (
+                                            <div style={{
+                                                backgroundColor: originColor,
+                                                color: '#fff',
+                                                fontSize: '0.75rem',
+                                                fontWeight: 600,
+                                                padding: '4px 12px',
+                                                letterSpacing: '0.05em',
+                                                textTransform: 'uppercase'
+                                            }}>
+                                                {originLabel}
+                                            </div>
+                                        )}
+
+                                        <Card.Body className="d-flex flex-column" style={{ gap: '12px' }}>
+                                            {/* headline */}
+                                            <div className="d-flex justify-content-between align-items-start gap-2">
+                                                <a href={item.url || '#'} target="_blank" rel="noopener noreferrer" style={{
+                                                    fontSize: '1.1rem',
+                                                    fontWeight: 700,
+                                                    color: '#0066cc',
+                                                    textDecoration: 'none',
+                                                    lineHeight: '1.4',
+                                                    display: '-webkit-box',
+                                                    WebkitLineClamp: 2,
+                                                    WebkitBoxOrient: 'vertical',
+                                                    overflow: 'hidden',
+                                                    flex: 1
+                                                }}>
+                                                    {item.headline}
+                                                </a>
                                                 <TTSButton selector={`#article-card-${item.id}`} className="flex-shrink-0" />
-                                            </Card.Title>
-                                            <Card.Text>
-                                                <strong>Autor:</strong> {item.author || 'N/A'}
-                                            </Card.Text>
-                                            {item.publicationDate && (
-                                                <Card.Text>
-                                                    <strong>Fecha de Publicación:</strong> {item.publicationDate}
-                                                </Card.Text>
-                                            )}
-                                            {item.sourceName && (
-                                                <Card.Text>
-                                                    <strong>Nombre de la Fuente:</strong> {item.sourceName}
-                                                </Card.Text>
-                                            )}
-                                            {item.paywall !== null && (
-                                                <Card.Text>
-                                                    <strong>¿De Pago?:</strong> {item.paywall === true ? 'Sí' : 'No'}
-                                                </Card.Text>
-                                            )}
-                                            {item.coverageLevel && (
-                                                <Card.Text>
-                                                    <strong>Nivel de Cobertura:</strong> {/* normalize coverage level with capital first letter */item.coverageLevel.charAt(0).toUpperCase() + item.coverageLevel.slice(1)}
-                                                </Card.Text>
-                                            )}
+                                            </div>
+
+                                            {/* metadata row with columns */}
+                                            <div style={{
+                                                display: 'grid',
+                                                gridTemplateColumns: 'repeat(auto-fit, minmax(80px, 1fr))',
+                                                gap: '8px',
+                                                fontSize: '0.8rem',
+                                                color: '#6c757d',
+                                                padding: '8px 0'
+                                            }}>
+                                                {/* autor */}
+                                                <div style={{ textAlign: 'center' }}>
+                                                    <div style={{ fontSize: '0.75rem', fontWeight: 600, marginBottom: '4px' }}>Autor</div>
+                                                    <div style={{ fontSize: '0.85rem', fontWeight: 500, color: '#333' }}>{item.author || 'N/A'}</div>
+                                                </div>
+
+                                                {/* fecha */}
+                                                {item.publicationDate && (
+                                                    <div style={{ textAlign: 'center' }}>
+                                                        <div style={{ fontSize: '0.75rem', fontWeight: 600, marginBottom: '4px' }}>Fecha</div>
+                                                        <div style={{ fontSize: '0.85rem', fontWeight: 500, color: '#333' }}>{item.publicationDate}</div>
+                                                    </div>
+                                                )}
+
+                                                {/* fuente */}
+                                                {item.sourceName && (
+                                                    <div style={{ textAlign: 'center' }}>
+                                                        <div style={{ fontSize: '0.75rem', fontWeight: 600, marginBottom: '4px' }}>Fuente</div>
+                                                        <div style={{ fontSize: '0.85rem', fontWeight: 500, color: '#333' }}>{item.sourceName}</div>
+                                                    </div>
+                                                )}
+
+                                                {/* cobertura */}
+                                                {item.coverageLevel && (
+                                                    <div style={{ textAlign: 'center' }}>
+                                                        <div style={{ fontSize: '0.75rem', fontWeight: 600, marginBottom: '4px' }}>Cobertura</div>
+                                                        <div style={{ fontSize: '0.85rem', fontWeight: 500, color: '#333' }}>{item.coverageLevel.charAt(0).toUpperCase() + item.coverageLevel.slice(1)}</div>
+                                                    </div>
+                                                )}
+
+                                                {/* paywall */}
+                                                {item.paywall !== null && (
+                                                    <div style={{ textAlign: 'center' }}>
+                                                        <div style={{ fontSize: '0.75rem', fontWeight: 600, marginBottom: '4px' }}>¿De pago?</div>
+                                                        <div style={{ fontSize: '0.85rem', fontWeight: 500, color: '#333' }}>
+                                                            {item.paywall ? 'Sí' : 'No'}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {/* summary */}
                                             {item.summary && (
-                                                <Card.Text>
-                                                    <strong>Resumen:</strong> {item.summary}
-                                                </Card.Text>
+                                                <p style={{
+                                                    margin: 0,
+                                                    fontSize: '0.95rem',
+                                                    color: '#555',
+                                                    lineHeight: '1.5',
+                                                    display: '-webkit-box',
+                                                    WebkitLineClamp: 3,
+                                                    WebkitBoxOrient: 'vertical',
+                                                    overflow: 'hidden'
+                                                }}>
+                                                    {item.summary}
+                                                </p>
                                             )}
+
+                                            {/* divider after summary */}
+                                            <div style={{ height: '1px', backgroundColor: 'rgba(108,117,125,0.2)', margin: '4px 0' }} />
+
+                                            {/* actors */}
                                             {Array.isArray(item.actorsMentioned) && item.actorsMentioned.length > 0 && (
-                                                <Card.Text>
-                                                    <strong>Actores Mencionados:</strong>{' '}
-                                                    {item.actorsMentioned.map((id) => actorsMap[id] || id).join(', ')}
-                                                </Card.Text>
+                                                <div>
+                                                    <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#555', marginBottom: '6px' }}>
+                                                        Actores Mencionados
+                                                    </div>
+                                                    <div className="d-flex flex-wrap gap-2">
+                                                        {item.actorsMentioned.map((id) => (
+                                                            <span key={id} className="badge rounded-pill" style={{ background: 'rgba(108,117,125,0.15)', color: '#6c757d', fontSize: '0.8rem' }}>
+                                                                {actorsMap[id] || id}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                </div>
                                             )}
+
+                                            {/* tags */}
                                             {Array.isArray(item.tags) && item.tags.length > 0 && (
-                                                <Card.Text>
-                                                    <strong>Etiquetas:</strong>{' '}
+                                                <div>
+                                                    <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#555', marginBottom: '6px' }}>
+                                                        Etiquetas
+                                                    </div>
                                                     <div className="d-flex flex-wrap gap-2">
                                                         {item.tags.map((id) => (
-                                                            <span key={id} className="badge rounded-pill" style={{ background: 'rgba(108,117,125,0.15)', color: '#6c757d' }}>
+                                                            <span key={id} className="badge rounded-pill" style={{ background: 'rgba(108,117,125,0.15)', color: '#6c757d', fontSize: '0.8rem' }}>
                                                                 {tagsMap[id] || id}
                                                             </span>
                                                         ))}
                                                     </div>
-                                                </Card.Text>
+                                                </div>
                                             )}
+
+                                            {/* locations */}
                                             {Array.isArray(item.location) && item.location.length > 0 && (
-                                                <Card.Text>
-                                                    <strong>Ubicación:</strong>{' '}
+                                                <div>
+                                                    <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#555', marginBottom: '6px' }}>
+                                                        Ubicación
+                                                    </div>
                                                     <div className="d-flex flex-wrap gap-2">
                                                         {item.location.map((loc) => (
-                                                            <span key={loc.id || loc.name} className="badge rounded-pill" style={{ background: 'rgba(108,117,125,0.15)', color: '#6c757d' }}>
+                                                            <span key={loc.id || loc.name} className="badge rounded-pill" style={{ background: 'rgba(108,117,125,0.15)', color: '#6c757d', fontSize: '0.8rem' }}>
                                                                 {loc.name}
                                                             </span>
                                                         ))}
                                                     </div>
-                                                </Card.Text>
+                                                </div>
                                             )}
                                         </Card.Body>
                                     </Card>
