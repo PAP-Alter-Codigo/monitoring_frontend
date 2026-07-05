@@ -262,20 +262,19 @@ function Filters({
           </Accordion.Body>
         </Accordion.Item>
 
-        {/* only render actors section if there are actors available */}
-        {Object.entries(actorsMap).length > 0 && (
-          <Accordion.Item eventKey="1">
-            <Accordion.Header>
-              <TTSButton
-                text={`Filtrar por actores mencionados. ${filters.actorsMentioned.length > 0 ? `Seleccionados: ${filters.actorsMentioned.join(", ")}` : "Ningún actor seleccionado."}`}
-                onClick={(e) => e.stopPropagation()}
-                style={{ marginRight: "0.5rem" }}
-              />
-              <div className="d-flex align-items-center gap-2 w-100 justify-content-between pe-3">
-                <span style={{ color: "black" }}>Actores Mencionados</span>
-              </div>
-            </Accordion.Header>
-            <Accordion.Body>
+        <Accordion.Item eventKey="1">
+          <Accordion.Header>
+            <TTSButton
+              text={`Filtrar por actores mencionados. ${filters.actorsMentioned.length > 0 ? `Seleccionados: ${filters.actorsMentioned.join(", ")}` : "Ningún actor seleccionado."}`}
+              onClick={(e) => e.stopPropagation()}
+              style={{ marginRight: "0.5rem" }}
+            />
+            <div className="d-flex align-items-center gap-2 w-100 justify-content-between pe-3">
+              <span style={{ color: "black" }}>Actores Mencionados</span>
+            </div>
+          </Accordion.Header>
+          <Accordion.Body>
+            {Object.entries(actorsMap).length > 0 ? (
               <Row>
                 {Object.entries(actorsMap).map(([id, name]) => (
                   <Col key={id} xs={6} md={4} lg={3}>
@@ -291,9 +290,11 @@ function Filters({
                   </Col>
                 ))}
               </Row>
-            </Accordion.Body>
-          </Accordion.Item>
-        )}
+            ) : (
+              <p className="text-muted">No hay actores disponibles por el momento</p>
+            )}
+          </Accordion.Body>
+        </Accordion.Item>
       </Accordion>
     </Form>
   );
