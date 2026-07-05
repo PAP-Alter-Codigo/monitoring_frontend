@@ -93,8 +93,7 @@ function ArticleList({ articles, actorsMap, tagsMap, locationsMap }) {
                                         </div>
                                         <Card.Body className="d-flex flex-column">
                                             <Card.Title className="d-flex justify-content-between align-items-start gap-2">
-                                                <TTSButton selector={`#article-card-${item.id}`} className="flex-shrink-0" />
-                                                <a href={item.url || '#'}>{item.headline}</a>
+                                                <a href={item.url || '#'} target="_blank" rel="noopener noreferrer">{item.headline}</a>
                                                 <TTSButton selector={`#article-card-${item.id}`} className="flex-shrink-0" />
                                             </Card.Title>
                                             <Card.Text>
@@ -107,7 +106,7 @@ function ArticleList({ articles, actorsMap, tagsMap, locationsMap }) {
                                                 <strong>Nombre de la Fuente:</strong> {item.sourceName || 'N/A'}
                                             </Card.Text>
                                             <Card.Text>
-                                                <strong>Paywall:</strong> {item.paywall === true ? 'Sí' : item.paywall === false ? 'No' : 'N/A'}
+                                                <strong>¿De Pago?:</strong> {item.paywall === true ? 'Sí' : item.paywall === false ? 'No' : 'N/A'}
                                             </Card.Text>
                                             <Card.Text>
                                                 <strong>Nivel de Cobertura:</strong> {item.coverageLevel || 'N/A'}
