@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
@@ -14,11 +14,14 @@ function TagsManager() {
   const [editingId, setEditingId] = useState(null);
   const [editValue, setEditValue] = useState('');
   const [newTagName, setNewTagName] = useState('');
-  const [modal, setModal] = useState({ show: false, id: null, name: '' });
+  const [modal, setModal] = useState({ show: false, id: null, name: '', isConflict: false, conflictMessage: '', references: 0 });
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [loading, setLoading] = useState(false);
 
-  const fetchTags = async () => {
+  const showToast = useCallback((message, type = 'success') =>
+    setToast({ show: true, message, type }), []);
+
+  const fetchTags = useCallback(async () => {
     try {
       const res = await fetchWithAuth(`${apiUrl}/tags`);
       const data = await res.json();
@@ -26,12 +29,11 @@ function TagsManager() {
     } catch {
       showToast('Error al cargar las etiquetas', 'danger');
     }
-  };
+  }, [apiUrl, showToast]);
 
-  useEffect(() => { fetchTags(); }, []);
-
-  const showToast = (message, type = 'success') =>
-    setToast({ show: true, message, type });
+  useEffect(() => {
+    fetchTags();
+  }, [fetchTags]);
 
   const startEdit = (tag) => {
     setEditingId(tag.id);
@@ -63,20 +65,36 @@ function TagsManager() {
   };
 
   const confirmDelete = (tag) =>
-    setModal({ show: true, id: tag.id, name: tag.name });
+    setModal({ show: true, id: tag.id, name: tag.name, isConflict: false, conflictMessage: '', references: 0 });
 
   const handleDelete = async () => {
     setLoading(true);
     try {
-      const res = await fetchWithAuth(`${apiUrl}/tags/${modal.id}`, { method: 'DELETE' });
+      const url = modal.isConflict
+        ? `${apiUrl}/tags/${modal.id}?force=true`
+        : `${apiUrl}/tags/${modal.id}`;
+      const res = await fetchWithAuth(url, { method: 'DELETE' });
+
+      if (res.status === 409) {
+        const data = await res.json();
+        setModal(m => ({
+          ...m,
+          isConflict: true,
+          conflictMessage: data.error || 'No se puede eliminar la etiqueta porque está referenciada.',
+          references: data.references || 0
+        }));
+        return;
+      }
+
       if (!res.ok) throw new Error();
-      showToast('Etiqueta eliminada exitosamente');
+      showToast(modal.isConflict ? 'Etiqueta eliminada forzosamente' : 'Etiqueta eliminada exitosamente');
       await fetchTags();
+      setModal({ show: false, id: null, name: '', isConflict: false, conflictMessage: '', references: 0 });
     } catch {
       showToast('Error al eliminar la etiqueta', 'danger');
+      setModal({ show: false, id: null, name: '', isConflict: false, conflictMessage: '', references: 0 });
     } finally {
       setLoading(false);
-      setModal({ show: false, id: null, name: '' });
     }
   };
 
@@ -109,10 +127,27 @@ function TagsManager() {
       />
       <ConfirmModal
         show={modal.show}
-        title="Eliminar Etiqueta"
-        message={`¿Estás seguro de que deseas eliminar la etiqueta "${modal.name}"? Esta acción no se puede deshacer.`}
+        title={modal.isConflict ? "Conflicto al Eliminar" : "Eliminar Etiqueta"}
+        message={
+          modal.isConflict ? (
+            <div>
+              <div className="d-flex align-items-center gap-2 mb-3">
+                <span className="badge bg-danger">Eliminación Forzada Requerida</span>
+                <span className="badge bg-secondary">{modal.references} {modal.references === 1 ? 'artículo referenciado' : 'artículos referenciados'}</span>
+              </div>
+              <p className="text-danger fw-semibold mb-2">{modal.conflictMessage}</p>
+              <p className="mb-0 text-muted small">
+                ¿Estás seguro de que deseas forzar la eliminación de la etiqueta <strong>"{modal.name}"</strong>? Esta acción la desvinculará de todos los artículos asociados y no se puede deshacer.
+              </p>
+            </div>
+          ) : (
+            `¿Estás seguro de que deseas eliminar la etiqueta "${modal.name}"? Esta acción no se puede deshacer.`
+          )
+        }
+        confirmLabel={modal.isConflict ? "Forzar Eliminación" : "Eliminar"}
+        confirmVariant="danger"
         onConfirm={handleDelete}
-        onCancel={() => setModal({ show: false, id: null, name: '' })}
+        onCancel={() => setModal({ show: false, id: null, name: '', isConflict: false, conflictMessage: '', references: 0 })}
       />
 
       <div className="mb-4">
