@@ -1,16 +1,33 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import BrushStrokes from "../../utils/brushStrokes";
 import { useNavigate } from "react-router-dom";
 import NoticiasRecientes from './NoticiasRecientes';
 import HelpTooltip from '../../components/HelpTooltip';
 import TTSButton from '../../components/TTSButton';
-
+import { fetchWithAuth } from '../../utils/fetchWithAuth';
 
 function HomePage() {
     const [hoveredCard, setHoveredCard] = useState(null);
+    const [isAdmin, setIsAdmin] = useState(false);
     const navigate = useNavigate();
     const articlesCardRef = useRef(null);
     const adminCardRef = useRef(null);
+
+    useEffect(() => {
+        const checkAdmin = async () => {
+            try {
+                const response = await fetchWithAuth(`${import.meta.env.VITE_API_URL}/auth/admin`);
+                const data = await response.json();
+                
+                if (data.isAdmin) {
+                    setIsAdmin(true);
+                }
+            } catch (error) {
+                console.error("Failed to fetch admin status", error);
+            }
+        };
+        checkAdmin();
+    }, []);
 
     return (
         <>
@@ -31,7 +48,7 @@ function HomePage() {
                 <div className='mx-4 my-4'>
 
                     <div className='row g-4 mb-5'>
-                        <div className="col-12 col-md-6">
+                        <div className={isAdmin ? "col-12 col-md-6" : "col-12"}>
                             <div
                                 ref={articlesCardRef}
                                 className="card border-0 shadow-lg h-100 position-relative overflow-hidden"
@@ -101,6 +118,7 @@ function HomePage() {
 
 
                         {/* SEGUNDA CARD */}
+                        {isAdmin && (
                         <div className="col-12 col-md-6">
                             <div
                                 ref={adminCardRef}
@@ -168,7 +186,7 @@ function HomePage() {
                                 </div>
                             </div>
                         </div>
-
+                        )}
                     </div>
 
                 </div>
