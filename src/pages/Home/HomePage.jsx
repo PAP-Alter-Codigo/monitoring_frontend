@@ -1,20 +1,37 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import BrushStrokes from "../../utils/brushStrokes";
 import { useNavigate } from "react-router-dom";
 import NoticiasRecientes from './NoticiasRecientes';
 import HelpTooltip from '../../components/HelpTooltip';
 import TTSButton from '../../components/TTSButton';
-
+import { fetchWithAuth } from '../../utils/fetchWithAuth';
 
 function HomePage() {
     const [hoveredCard, setHoveredCard] = useState(null);
+    const [isAdmin, setIsAdmin] = useState(false);
     const navigate = useNavigate();
     const articlesCardRef = useRef(null);
     const adminCardRef = useRef(null);
 
+    useEffect(() => {
+        const checkAdmin = async () => {
+            try {
+                const response = await fetchWithAuth(`${import.meta.env.VITE_API_URL}/auth/admin`);
+                const data = await response.json();
+                
+                if (data.isAdmin) {
+                    setIsAdmin(true);
+                }
+            } catch (error) {
+                console.error("Failed to fetch admin status", error);
+            }
+        };
+        checkAdmin();
+    }, []);
+
     return (
         <>
-            <div className="min-vh-100" style={{ background: 'linear-gradient(135deg, #43C6AC 0%, #191654 100%)' }}>
+            <div className="min-vh-100" style={{ background: 'linear-gradient(135deg, #43C6AC 0%, #191654 100%)', paddingBottom: '3rem' }}>
                 <nav className="navbar navbar-expand-lg navbar-dark py-3">
                     <div className="container">
                         <div className="navbar-brand d-flex align-items-center">
@@ -31,7 +48,7 @@ function HomePage() {
                 <div className='mx-4 my-4'>
 
                     <div className='row g-4 mb-5'>
-                        <div className="col-12 col-md-6">
+                        <div className={isAdmin ? "col-12 col-md-6" : "col-12"}>
                             <div
                                 ref={articlesCardRef}
                                 className="card border-0 shadow-lg h-100 position-relative overflow-hidden"
@@ -49,7 +66,6 @@ function HomePage() {
                                 <div className="position-absolute top-0 end-0 opacity-25">
                                     <BrushStrokes variant="circle" color="#667eea" width={100} height={100} strokeWidth={6} opacity={0.3} />
                                 </div>
-                                <TTSButton targetRef={articlesCardRef} className="position-absolute top-0 end-0 m-3" style={{ zIndex: 10 }} />
 
                                 <div className="card-body p-4 p-md-5 position-relative">
                                     <div className="mb-4">
@@ -58,7 +74,8 @@ function HomePage() {
                                             style={{
                                                 width: '70px',
                                                 height: '70px',
-                                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+                                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                                boxShadow: '0 0 30px rgba(102, 126, 234, 0.4)'
                                             }}
                                         >
                                             <span className="fs-1">📰</span>
@@ -83,17 +100,17 @@ function HomePage() {
                                         Accede a la base de datos de artículos guardados. Busca y filtra información relevante
                                     </p>
 
-                                    <div className="mt-4 text-end">
-                                        <span
-                                            className="text-primary fw-medium"
+                                    <div className="mt-4">
+                                        <button
+                                            className="btn btn-primary fw-medium"
+                                            onClick={() => navigate("/search")}
                                             style={{
-                                                transition: 'transform 0.3s ease',
-                                                display: 'inline-block',
-                                                transform: hoveredCard === 'news' ? 'translateX(5px)' : 'translateX(0)'
+                                                transition: 'all 0.3s ease',
+                                                transform: hoveredCard === 'news' ? 'scale(1.05)' : 'scale(1)'
                                             }}
                                         >
-                                            Buscar Artículos
-                                        </span>
+                                            Buscar Artículos →
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -101,6 +118,7 @@ function HomePage() {
 
 
                         {/* SEGUNDA CARD */}
+                        {isAdmin && (
                         <div className="col-12 col-md-6">
                             <div
                                 ref={adminCardRef}
@@ -119,7 +137,6 @@ function HomePage() {
                                 <div className="position-absolute top-0 end-0 opacity-25">
                                     <BrushStrokes variant="circle" color="#5f7e08" width={100} height={100} strokeWidth={6} opacity={0.3} />
                                 </div>
-                                <TTSButton targetRef={adminCardRef} className="position-absolute top-0 end-0 m-3" style={{ zIndex: 10 }} />
 
                                 <div className="card-body p-4 p-md-5 position-relative">
                                     <div className="mb-4">
@@ -128,7 +145,8 @@ function HomePage() {
                                             style={{
                                                 width: '70px',
                                                 height: '70px',
-                                                background: 'linear-gradient(135deg, #a1c736 0%, #5f7e08 100%)'
+                                                background: 'linear-gradient(135deg, #a1c736 0%, #5f7e08 100%)',
+                                                boxShadow: '0 0 30px rgba(161, 199, 54, 0.4)'
                                             }}
                                         >
                                             <span className="fs-1">🔍</span>
@@ -153,22 +171,22 @@ function HomePage() {
                                         Página de administración donde el administrador puede crear nuevas etiquetas y fuentes
                                     </p>
 
-                                    <div className="mt-4 text-end">
-                                        <span
-                                            className="text-primary fw-medium"
+                                    <div className="mt-4">
+                                        <button
+                                            className="btn btn-success fw-medium"
+                                            onClick={() => navigate("/admin-page")}
                                             style={{
-                                                transition: 'transform 0.3s ease',
-                                                display: 'inline-block',
-                                                transform: hoveredCard === 'search' ? 'translateX(5px)' : 'translateX(0)'
+                                                transition: 'all 0.3s ease',
+                                                transform: hoveredCard === 'search' ? 'scale(1.05)' : 'scale(1)'
                                             }}
                                         >
-                                            Panel de Administración
-                                        </span>
+                                            Panel de Administración →
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
+                        )}
                     </div>
 
                 </div>

@@ -1,0 +1,29 @@
+.metadata-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+}
+
+.metadata-item {
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .metadata-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .metadata-item {
+    text-align: left;
+  }
+
+  .metadata-item > div:first-child {
+    display: inline;
+    font-weight: 600;
+    margin-right: 4px;
+  }
+
+  .metadata-item > div:last-child {
+    display: inline;
+    font-weight: 500;
+  }
+}

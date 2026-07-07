@@ -3,6 +3,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { parseDate } from '../../utils/parseDate';
 import TTSButton from '../../components/TTSButton';
+import './ArticleList.css';
 
 const MONTHS_ES = [
     'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
@@ -52,7 +53,7 @@ function ArticleList({ articles, actorsMap, tagsMap, locationsMap }) {
                     <div className="d-flex align-items-center gap-3 mb-3">
                         <span
                             className="text-capitalize fw-bold"
-                            style={{ fontSize: '1rem', color: '#191654', whiteSpace: 'nowrap' }}
+                            style={{ fontSize: 'var(--fs-lg)', color: '#191654', whiteSpace: 'nowrap' }}
                         >
                             {key}
                         </span>
@@ -62,7 +63,7 @@ function ArticleList({ articles, actorsMap, tagsMap, locationsMap }) {
                         />
                         <span
                             className="badge rounded-pill"
-                            style={{ background: 'rgba(102,126,234,0.15)', color: '#667eea', fontSize: '0.75rem' }}
+                            style={{ background: 'rgba(102,126,234,0.15)', color: '#667eea', fontSize: 'var(--fs-xs)' }}
                         >
                             {groupArticles.length}
                         </span>
@@ -74,67 +75,174 @@ function ArticleList({ articles, actorsMap, tagsMap, locationsMap }) {
                             const originColor = origin === 'muninn' ? '#722294' : '#60CC7D';
                             const originLabel =
                                 origin === 'muninn' ? 'Muninn'
-                                : origin === 'user' ? 'Usuario'
-                                : origin || 'N/A';
+                                    : origin === 'user' ? 'Usuario'
+                                        : origin || 'N/A';
 
                             return (
                                 <Col key={item.id} className="d-flex">
-                                    <Card id={`article-card-${item.id}`} className="w-100 d-flex flex-column" style={{ overflow: 'hidden' }}>
-                                        <div style={{
-                                            backgroundColor: originColor,
-                                            color: '#fff',
-                                            fontSize: '0.75rem',
-                                            fontWeight: 600,
-                                            padding: '4px 12px',
-                                            letterSpacing: '0.05em',
-                                            textTransform: 'uppercase',
-                                        }}>
-                                            {originLabel}
-                                        </div>
-                                        <Card.Body className="d-flex flex-column">
-                                            <Card.Title className="d-flex justify-content-between align-items-start gap-2">
+                                    <Card id={`article-card-${item.id}`} className="w-100 d-flex flex-column" style={{
+                                        overflow: 'hidden',
+                                        transition: 'box-shadow 0.3s ease, transform 0.3s ease',
+                                        cursor: 'pointer'
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.boxShadow = '0 8px 16px rgba(0,0,0,0.15)';
+                                        e.currentTarget.style.transform = 'scale(1.02)';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.boxShadow = '';
+                                        e.currentTarget.style.transform = 'scale(1)';
+                                    }}>
+                                        {/* origin badge header */}
+                                        {(origin === 'muninn' || origin === 'user') && (
+                                            <div style={{
+                                                backgroundColor: originColor,
+                                                color: '#fff',
+                                                fontSize: 'var(--fs-sm)',
+                                                fontWeight: 600,
+                                                padding: '4px 12px',
+                                                letterSpacing: '0.05em',
+                                                textTransform: 'uppercase'
+                                            }}>
+                                                {originLabel}
+                                            </div>
+                                        )}
+
+                                        <Card.Body className="d-flex flex-column" style={{ gap: '12px' }}>
+                                            {/* headline */}
+                                            <div className="d-flex justify-content-between align-items-start gap-2">
+                                                <a href={item.url || '#'} target="_blank" rel="noopener noreferrer" style={{
+                                                    fontSize: 'var(--fs-xl)',
+                                                    fontWeight: 700,
+                                                    color: '#0066cc',
+                                                    textDecoration: 'none',
+                                                    lineHeight: 'var(--lh-tight)',
+                                                    display: '-webkit-box',
+                                                    WebkitLineClamp: 2,
+                                                    WebkitBoxOrient: 'vertical',
+                                                    overflow: 'hidden',
+                                                    flex: 1
+                                                }}>
+                                                    {item.headline}
+                                                </a>
                                                 <TTSButton selector={`#article-card-${item.id}`} className="flex-shrink-0" />
-                                                <a href={item.url || '#'}>{item.headline}</a>
-                                                <TTSButton selector={`#article-card-${item.id}`} className="flex-shrink-0" />
-                                            </Card.Title>
-                                            <Card.Text>
-                                                <strong>Autor:</strong> {item.author || 'N/A'}
-                                            </Card.Text>
-                                            <Card.Text>
-                                                <strong>Fecha de Publicación:</strong> {item.publicationDate || 'N/A'}
-                                            </Card.Text>
-                                            <Card.Text>
-                                                <strong>Nombre de la Fuente:</strong> {item.sourceName || 'N/A'}
-                                            </Card.Text>
-                                            <Card.Text>
-                                                <strong>Paywall:</strong> {item.paywall === true ? 'Sí' : item.paywall === false ? 'No' : 'N/A'}
-                                            </Card.Text>
-                                            <Card.Text>
-                                                <strong>Nivel de Cobertura:</strong> {item.coverageLevel || 'N/A'}
-                                            </Card.Text>
+                                            </div>
+
+                                            {/* metadata row with columns */}
+                                            <div className="metadata-grid" style={{
+                                                display: 'grid',
+                                                gap: '8px',
+                                                fontSize: 'var(--fs-sm)',
+                                                color: '#6c757d',
+                                                padding: '8px 0'
+                                            }}>
+                                                {/* autor */}
+                                                <div className="metadata-item">
+                                                    <div style={{ fontSize: 'var(--fs-xs)', fontWeight: 600, marginBottom: '4px' }}>Autor</div>
+                                                    <div style={{ fontSize: 'var(--fs-sm)', fontWeight: 500, color: '#333' }}>{item.author || 'N/A'}</div>
+                                                </div>
+
+                                                {/* fecha */}
+                                                {item.publicationDate && (
+                                                    <div className="metadata-item">
+                                                        <div style={{ fontSize: 'var(--fs-xs)', fontWeight: 600, marginBottom: '4px' }}>Fecha</div>
+                                                        <div style={{ fontSize: 'var(--fs-sm)', fontWeight: 500, color: '#333' }}>{item.publicationDate}</div>
+                                                    </div>
+                                                )}
+
+                                                {/* fuente */}
+                                                {item.sourceName && (
+                                                    <div className="metadata-item">
+                                                        <div style={{ fontSize: 'var(--fs-xs)', fontWeight: 600, marginBottom: '4px' }}>Fuente</div>
+                                                        <div style={{ fontSize: 'var(--fs-sm)', fontWeight: 500, color: '#333' }}>{item.sourceName}</div>
+                                                    </div>
+                                                )}
+
+                                                {/* cobertura */}
+                                                {item.coverageLevel && (
+                                                    <div className="metadata-item">
+                                                        <div style={{ fontSize: 'var(--fs-xs)', fontWeight: 600, marginBottom: '4px' }}>Cobertura</div>
+                                                        <div style={{ fontSize: 'var(--fs-sm)', fontWeight: 500, color: '#333' }}>{item.coverageLevel.charAt(0).toUpperCase() + item.coverageLevel.slice(1)}</div>
+                                                    </div>
+                                                )}
+
+                                                {/* paywall */}
+                                                {item.paywall !== null && (
+                                                    <div className="metadata-item">
+                                                        <div style={{ fontSize: 'var(--fs-xs)', fontWeight: 600, marginBottom: '4px' }}>¿De pago?</div>
+                                                        <div style={{ fontSize: 'var(--fs-sm)', fontWeight: 500, color: '#333' }}>
+                                                            {item.paywall ? 'Sí' : 'No'}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {/* summary */}
                                             {item.summary && (
-                                                <Card.Text>
-                                                    <strong>Resumen:</strong> {item.summary}
-                                                </Card.Text>
+                                                <p style={{
+                                                    margin: 0,
+                                                    fontSize: 'var(--fs-base)',
+                                                    color: '#555',
+                                                    lineHeight: 'var(--lh-normal)',
+                                                    display: '-webkit-box',
+                                                    WebkitLineClamp: 3,
+                                                    WebkitBoxOrient: 'vertical',
+                                                    overflow: 'hidden'
+                                                }}>
+                                                    {item.summary}
+                                                </p>
                                             )}
-                                            <Card.Text>
-                                                <strong>Actores Mencionados:</strong>{' '}
-                                                {Array.isArray(item.actorsMentioned)
-                                                    ? item.actorsMentioned.map((id) => actorsMap[id] || id).join(', ')
-                                                    : 'N/A'}
-                                            </Card.Text>
-                                            <Card.Text>
-                                                <strong>Etiquetas:</strong>{' '}
-                                                {Array.isArray(item.tags)
-                                                    ? item.tags.map((id) => tagsMap[id] || id).join(', ')
-                                                    : 'N/A'}
-                                            </Card.Text>
-                                            <Card.Text>
-                                                <strong>Ubicación:</strong>{' '}
-                                                {Array.isArray(item.location) && item.location.length > 0
-                                                    ? item.location.map((loc) => loc.name).join(', ')
-                                                    : 'N/A'}
-                                            </Card.Text>
+
+                                            {/* divider after summary */}
+                                            <div style={{ height: '1px', backgroundColor: 'rgba(108,117,125,0.2)', margin: '4px 0' }} />
+
+                                            {/* actors */}
+                                            {Array.isArray(item.actorsMentioned) && item.actorsMentioned.length > 0 && (
+                                                <div>
+                                                    <div style={{ fontSize: 'var(--fs-sm)', fontWeight: 600, color: '#555', marginBottom: '6px' }}>
+                                                        Actores Mencionados
+                                                    </div>
+                                                    <div className="d-flex flex-wrap gap-2">
+                                                        {item.actorsMentioned.map((id) => (
+                                                            <span key={id} className="badge rounded-pill" style={{ background: 'rgba(108,117,125,0.15)', color: '#6c757d', fontSize: 'var(--fs-sm)' }}>
+                                                                {actorsMap[id] || id}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {/* tags */}
+                                            {Array.isArray(item.tags) && item.tags.length > 0 && (
+                                                <div>
+                                                    <div style={{ fontSize: 'var(--fs-sm)', fontWeight: 600, color: '#555', marginBottom: '6px' }}>
+                                                        Etiquetas
+                                                    </div>
+                                                    <div className="d-flex flex-wrap gap-2">
+                                                        {item.tags.map((id) => (
+                                                            <span key={id} className="badge rounded-pill" style={{ background: 'rgba(108,117,125,0.15)', color: '#6c757d', fontSize: 'var(--fs-sm)' }}>
+                                                                {tagsMap[id] || id}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {/* locations */}
+                                            {Array.isArray(item.location) && item.location.length > 0 && (
+                                                <div>
+                                                    <div style={{ fontSize: 'var(--fs-sm)', fontWeight: 600, color: '#555', marginBottom: '6px' }}>
+                                                        Ubicación
+                                                    </div>
+                                                    <div className="d-flex flex-wrap gap-2">
+                                                        {item.location.map((loc) => (
+                                                            <span key={loc.id || loc.name} className="badge rounded-pill" style={{ background: 'rgba(108,117,125,0.15)', color: '#6c757d', fontSize: 'var(--fs-sm)' }}>
+                                                                {loc.name}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
                                         </Card.Body>
                                     </Card>
                                 </Col>

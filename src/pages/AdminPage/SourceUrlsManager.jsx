@@ -158,7 +158,7 @@ function SourceUrlsManager() {
               value={newSource.type}
               onChange={e => setNewSource(s => ({ ...s, type: e.target.value }))}
             >
-              {TYPE_OPTIONS.map(t => <option key={t} value={t}>{t}</option>)}
+              {TYPE_OPTIONS.map(t => <option key={t} value={t}>{t.toUpperCase()}</option>)}
             </Form.Select>
           </Col>
           <Col xs={6} md={2}>
@@ -179,7 +179,7 @@ function SourceUrlsManager() {
         <table className="table table-hover align-middle mb-0">
           <thead>
             <tr className="border-bottom">
-              <th className="text-muted fw-semibold pb-3" style={{ width: '70px', fontSize: '0.8rem' }}>#</th>
+              {/* <th className="text-muted fw-semibold pb-3" style={{ width: '70px', fontSize: '0.8rem' }}>#</th> */}
               <th className="text-muted fw-semibold pb-3" style={{ fontSize: '0.8rem' }}>NOMBRE</th>
               <th className="text-muted fw-semibold pb-3" style={{ fontSize: '0.8rem' }}>URL</th>
               <th className="text-muted fw-semibold pb-3" style={{ width: '90px', fontSize: '0.8rem' }}>TIPO</th>
@@ -189,22 +189,13 @@ function SourceUrlsManager() {
           <tbody>
             {sources.length === 0 ? (
               <tr>
-                <td colSpan={5} className="text-center text-muted py-5">
+                <td colSpan={4} className="text-center text-muted py-5">
                   <div style={{ fontSize: '2rem' }}>🔗</div>
                   <div className="mt-2">No hay fuentes registradas</div>
                 </td>
               </tr>
             ) : sources.map(source => (
               <tr key={source.id}>
-                <td className="text-muted small">
-                  <div className="d-flex align-items-center gap-1">
-                    <TTSButton
-                      text={`Nombre: ${source.name}. URL: ${source.source_url}. Tipo: ${source.type}.`}
-                      onClick={(e) => e.stopPropagation()}
-                    />
-                    {source.id}
-                  </div>
-                </td>
                 <td>
                   {editingId === source.id ? (
                     <Form.Control
@@ -213,7 +204,13 @@ function SourceUrlsManager() {
                       onChange={e => setEditValues(v => ({ ...v, name: e.target.value }))}
                     />
                   ) : (
-                    <span className="fw-medium">{source.name}</span>
+                    <div className="d-flex align-items-center gap-2">
+                      <TTSButton
+                        text={`Nombre: ${source.name}. URL: ${source.source_url}. Tipo: ${source.type}.`}
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                      <span className="fw-medium">{source.name}</span>
+                    </div>
                   )}
                 </td>
                 <td>
@@ -242,11 +239,11 @@ function SourceUrlsManager() {
                       value={editValues.type}
                       onChange={e => setEditValues(v => ({ ...v, type: e.target.value }))}
                     >
-                      {TYPE_OPTIONS.map(t => <option key={t} value={t}>{t}</option>)}
+                      {TYPE_OPTIONS.map(t => <option key={t} value={t}>{t.toUpperCase()}</option>)}
                     </Form.Select>
                   ) : (
                     <span className="badge rounded-pill px-2 py-1 small fw-semibold" style={typeBadgeStyle(source.type)}>
-                      {source.type}
+                      {source.type.toUpperCase()}
                     </span>
                   )}
                 </td>

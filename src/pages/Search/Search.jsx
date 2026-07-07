@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import * as XLSX from "xlsx";
 import Filters from "./Filters";
 import ArticleList from "./ArticleList";
+import LoadingPage from "./LoadingPage";
 import BrushStrokes from "../../utils/brushStrokes"
 import { fetchWithAuth } from "../../utils/fetchWithAuth";
 import { parseDate } from "../../utils/parseDate";
@@ -154,7 +155,7 @@ function Search() {
     );
   });
 
-  if (!dataIsLoaded) return <div>Cargando...</div>;
+  if (!dataIsLoaded) return <LoadingPage />;
 
   const exportToExcel = () => {
     const dataToExport = filteredData.map(item => ({
