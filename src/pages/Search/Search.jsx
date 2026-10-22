@@ -158,15 +158,29 @@ function Search() {
   if (!dataIsLoaded) return <LoadingPage />;
 
   const exportToExcel = () => {
-    const dataToExport = filteredData.map(item => ({
-      Titular: item.headline,
-      Fuente: item.sourceName,
-      Fecha: item.publicationDate,
-      Autor: item.author,
-      Enlace: item.url
+    const dataToExport = filteredData.map((item) => ({
+      Titular: item.headline || "",
+      Fuente: item.sourceName || "",
+      Fecha: item.publicationDate || "",
+      Autor: item.author || "",
+      Relevancia: item.relevance || item.relevanceLevel || item.relevance_level || "",
+      "Por qué": item.why || item.whyItMatters || item.why_it_matters || "",
+      Resumen: item.summary || "",
+      Enlace: item.url || "",
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+    worksheet["!cols"] = [
+      { wch: 40 }, // Titular
+      { wch: 20 }, // Fuente
+      { wch: 12 }, // Fecha
+      { wch: 25 }, // Autor
+      { wch: 15 }, // Relevancia
+      { wch: 45 }, // Por qué
+      { wch: 50 }, // Resumen
+      { wch: 40 }, // Enlace
+    ];
+
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Resultados");
     XLSX.writeFile(workbook, "resultados_busqueda.xlsx");
