@@ -3,7 +3,7 @@ import * as XLSX from "xlsx";
 import Filters from "./Filters";
 import ArticleList from "./ArticleList";
 import LoadingPage from "./LoadingPage";
-import BrushStrokes from "../../utils/brushStrokes"
+import BrushStrokes from "../../utils/brushStrokes";
 import { fetchWithAuth } from "../../utils/fetchWithAuth";
 import { parseDate } from "../../utils/parseDate";
 
@@ -44,61 +44,87 @@ function Search() {
   });
 
   useEffect(() => {
+    // 1. Carga de Artículos
     fetchWithAuth(`${apiUrl}/articles`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setData(data);
+      .then((res) => {
+        if (!res || !res.ok) {
+          throw new Error(`Error en la petición de artículos: ${res?.status}`);
+        }
+        return res.json();
+      })
+      .then((articles) => {
+        if (!Array.isArray(articles)) {
+          console.error("Respuesta no válida para artículos:", articles);
+          setData([]);
+          setDataIsLoaded(true);
+          return;
+        }
+
+        setData(articles);
 
         const normalizeCoverage = (val) => {
           if (!val) return "";
-          return val.split('/')
-            .map(p => p.trim().toLowerCase())
-            .map(p => p.charAt(0).toUpperCase() + p.slice(1))
+          return val
+            .split("/")
+            .map((p) => p.trim().toLowerCase())
+            .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
             .sort()
-            .join(' / ');
+            .join(" / ");
         };
 
-        const uniqueSources = [...new Set(data.map(item => item.sourceName).filter(Boolean))].sort();
-        const uniqueCoverage = [...new Set(data.map(item => normalizeCoverage(item.coverageLevel)).filter(Boolean))].sort();
-        const uniqueAuthors = [...new Set(data.map(item => item.author?.trim()).filter(Boolean))].sort();
+        const uniqueSources = [...new Set(articles.map((item) => item.sourceName).filter(Boolean))].sort();
+        const uniqueCoverage = [...new Set(articles.map((item) => normalizeCoverage(item.coverageLevel)).filter(Boolean))].sort();
+        const uniqueAuthors = [...new Set(articles.map((item) => item.author?.trim()).filter(Boolean))].sort();
 
         setSourceNames(uniqueSources);
         setCoverageLevels(uniqueCoverage);
         setAuthorNames(uniqueAuthors);
-
+        setDataIsLoaded(true);
+      })
+      .catch((err) => {
+        console.error("Error al cargar artículos:", err);
+        setData([]);
         setDataIsLoaded(true);
       });
 
+    // 2. Carga de Catálogos (Tags, Actores, Ubicaciones)
     Promise.all([
-      fetchWithAuth(`${apiUrl}/tags`).then((res) => res.json()),
-      fetchWithAuth(`${apiUrl}/actors`).then((res) => res.json()),
-      fetchWithAuth(`${apiUrl}/locations`).then((res) => res.json()),
-    ]).then(([tags, actors, locations]) => {
-      const tMap = {},
-        aMap = {},
-        lMap = {};
-      tags.forEach((tag) => (tMap[tag.id] = tag.name));
-      actors.forEach((actor) => (aMap[actor.id] = actor.name));
-      locations.forEach((loc) => (lMap[loc.id] = loc.name));
-      setTagsMap(tMap);
-      setActorsMap(aMap);
-      setLocationsMap(lMap);
-    });
-  }, []);
+      fetchWithAuth(`${apiUrl}/tags`).then((res) => (res && res.ok ? res.json() : [])),
+      fetchWithAuth(`${apiUrl}/actors`).then((res) => (res && res.ok ? res.json() : [])),
+      fetchWithAuth(`${apiUrl}/locations`).then((res) => (res && res.ok ? res.json() : [])),
+    ])
+      .then(([tags, actors, locations]) => {
+        const tMap = {}, aMap = {}, lMap = {};
 
-  const filteredData = data.filter((item) => {
+        if (Array.isArray(tags)) tags.forEach((tag) => (tMap[tag.id] = tag.name));
+        if (Array.isArray(actors)) actors.forEach((actor) => (aMap[actor.id] = actor.name));
+        if (Array.isArray(locations)) locations.forEach((loc) => (lMap[loc.id] = loc.name));
+
+        setTagsMap(tMap);
+        setActorsMap(aMap);
+        setLocationsMap(lMap);
+      })
+      .catch((err) => {
+        console.error("Error al cargar datos auxiliares:", err);
+      });
+  }, [apiUrl]);
+
+  // Asegurar que data sea siempre un arreglo antes de filtrar
+  const safeData = Array.isArray(data) ? data : [];
+
+  const filteredData = safeData.filter((item) => {
     const articleDate = parseDate(item.publicationDate);
     const startDate = filters.publicationDate.startDate
-      ? new Date(filters.publicationDate.startDate + 'T00:00:00Z')
+      ? new Date(filters.publicationDate.startDate + "T00:00:00Z")
       : null;
     const endDate = filters.publicationDate.endDate
-      ? new Date(filters.publicationDate.endDate + 'T23:59:59Z')
+      ? new Date(filters.publicationDate.endDate + "T23:59:59Z")
       : null;
 
     const isInDateRange =
-      articleDate && ((!startDate || articleDate >= startDate) &&
-        (!endDate || articleDate <= endDate));
+      articleDate &&
+      (!startDate || articleDate >= startDate) &&
+      (!endDate || articleDate <= endDate);
 
     const headline = item.headline || "";
     const sourceName = item.sourceName || "";
@@ -107,18 +133,19 @@ function Search() {
 
     const normalizeCoverage = (val) => {
       if (!val) return "";
-      return val.split('/')
-        .map(p => p.trim().toLowerCase())
-        .map(p => p.charAt(0).toUpperCase() + p.slice(1))
+      return val
+        .split("/")
+        .map((p) => p.trim().toLowerCase())
+        .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
         .sort()
-        .join(' / ');
+        .join(" / ");
     };
     const coverageLevel = normalizeCoverage(item.coverageLevel);
 
     const actors = Array.isArray(item.actorsMentioned)
       ? item.actorsMentioned
-        .map((id) => actorsMap[id]?.toLowerCase() || "")
-        .join(", ")
+          .map((id) => actorsMap[id]?.toLowerCase() || "")
+          .join(", ")
       : "";
 
     const tags = Array.isArray(item.tags)
@@ -171,14 +198,14 @@ function Search() {
 
     const worksheet = XLSX.utils.json_to_sheet(dataToExport);
     worksheet["!cols"] = [
-      { wch: 40 }, // Titular
-      { wch: 20 }, // Fuente
-      { wch: 12 }, // Fecha
-      { wch: 25 }, // Autor
-      { wch: 15 }, // Relevancia
-      { wch: 45 }, // Por qué
-      { wch: 50 }, // Resumen
-      { wch: 40 }, // Enlace
+      { wch: 40 },
+      { wch: 20 },
+      { wch: 12 },
+      { wch: 25 },
+      { wch: 15 },
+      { wch: 45 },
+      { wch: 50 },
+      { wch: 40 },
     ];
 
     const workbook = XLSX.utils.book_new();
@@ -187,81 +214,74 @@ function Search() {
   };
 
   return (
-    <>
-      <div className="min-vh-100 d-flex align-items-center justify-content-center position-relative overflow-hidden"
-        style={{ background: 'linear-gradient(135deg, #43C6AC 0%, #191654 100%)' }}>
-
-        {/* Decorative brush strokes background */}
-        <div className="position-absolute top-0 start-0 opacity-25">
-          <BrushStrokes variant="circle" color="#ffffff" width={120} height={120} strokeWidth={8} opacity={0.3} />
-        </div>
-        <div className="position-absolute" style={{ top: '15%', right: '10%', opacity: 0.2 }}>
-          <BrushStrokes variant="wave" color="#ffffff" width={180} height={60} strokeWidth={6} opacity={0.4} />
-        </div>
-        <div className="position-absolute" style={{ bottom: '20%', left: '5%', opacity: 0.15 }}>
-          <BrushStrokes variant="circle" color="#ffffff" width={100} height={100} strokeWidth={6} opacity={0.3} />
-        </div>
-        <div className="position-absolute" style={{ bottom: '10%', right: '15%', opacity: 0.2 }}>
-          <BrushStrokes variant="wave" color="#ffffff" width={150} height={50} strokeWidth={5} opacity={0.4} />
-        </div>
-
-
-
-        <div className="search-page">
-
-          {/* NAV BAR */}
-          <ReturnMenu />
-
-          {/* MAIN CONTAINER */}
-          <Container className="app-container mt-4">
-            <h1 className="text-white pb-4">Artículos</h1>
-            <Filters
-              filters={filters}
-              setFilters={setFilters}
-              tagsMap={tagsMap}
-              actorsMap={actorsMap}
-              locationsMap={locationsMap}
-              sourceNames={sourceNames}
-              coverageLevels={coverageLevels}
-              authorNames={authorNames}
-            />
-            <hr />
-            <div className="d-flex justify-content-between align-items-center mb-3 text-white">
-              <div>
-                <h2 className="mb-0">Resultados</h2>
-                <p className="mb-0 text-white-50">Número de artículos: {filteredData.length}</p>
-              </div>
-              <button
-                className="btn btn-success d-flex align-items-center gap-2"
-                onClick={exportToExcel}
-                disabled={filteredData.length === 0}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                  <path d="M5.884 6.68a.5.5 0 1 0-.768.64L7.349 10l-2.233 2.68a.5.5 0 0 0 .768.64L8 10.781l2.116 2.54a.5.5 0 0 0 .768-.641L8.651 10l2.233-2.68a.5.5 0 0 0-.768-.64L8 9.219l-2.116-2.54z" />
-                  <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z" />
-                </svg>
-                Exportar a Excel
-              </button>
-            </div>
-            <ArticleList
-              articles={filteredData}
-              actorsMap={actorsMap}
-              tagsMap={tagsMap}
-              locationsMap={locationsMap}
-            />
-          </Container>
-        </div>
-
-        <HelpTooltip
-          page="search"
-          positionStyle={{
-            position: "fixed",
-            bottom: "30px",
-            right: "30px"
-          }}
-        />
+    <div
+      className="min-vh-100 d-flex align-items-center justify-content-center position-relative overflow-hidden"
+      style={{ background: "linear-gradient(135deg, #43C6AC 0%, #191654 100%)" }}
+    >
+      <div className="position-absolute top-0 start-0 opacity-25">
+        <BrushStrokes variant="circle" color="#ffffff" width={120} height={120} strokeWidth={8} opacity={0.3} />
       </div>
-    </>
+      <div className="position-absolute" style={{ top: "15%", right: "10%", opacity: 0.2 }}>
+        <BrushStrokes variant="wave" color="#ffffff" width={180} height={60} strokeWidth={6} opacity={0.4} />
+      </div>
+      <div className="position-absolute" style={{ bottom: "20%", left: "5%", opacity: 0.15 }}>
+        <BrushStrokes variant="circle" color="#ffffff" width={100} height={100} strokeWidth={6} opacity={0.3} />
+      </div>
+      <div className="position-absolute" style={{ bottom: "10%", right: "15%", opacity: 0.2 }}>
+        <BrushStrokes variant="wave" color="#ffffff" width={150} height={50} strokeWidth={5} opacity={0.4} />
+      </div>
+
+      <div className="search-page">
+        <ReturnMenu />
+
+        <Container className="app-container mt-4">
+          <h1 className="text-white pb-4">Artículos</h1>
+          <Filters
+            filters={filters}
+            setFilters={setFilters}
+            tagsMap={tagsMap}
+            actorsMap={actorsMap}
+            locationsMap={locationsMap}
+            sourceNames={sourceNames}
+            coverageLevels={coverageLevels}
+            authorNames={authorNames}
+          />
+          <hr />
+          <div className="d-flex justify-content-between align-items-center mb-3 text-white">
+            <div>
+              <h2 className="mb-0">Resultados</h2>
+              <p className="mb-0 text-white-50">Número de artículos: {filteredData.length}</p>
+            </div>
+            <button
+              className="btn btn-success d-flex align-items-center gap-2"
+              onClick={exportToExcel}
+              disabled={filteredData.length === 0}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M5.884 6.68a.5.5 0 1 0-.768.64L7.349 10l-2.233 2.68a.5.5 0 0 0 .768.64L8 10.781l2.116 2.54a.5.5 0 0 0 .768-.641L8.651 10l2.233-2.68a.5.5 0 0 0-.768-.64L8 9.219l-2.116-2.54z" />
+                <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z" />
+              </svg>
+              Exportar a Excel
+            </button>
+          </div>
+          <ArticleList
+            articles={filteredData}
+            actorsMap={actorsMap}
+            tagsMap={tagsMap}
+            locationsMap={locationsMap}
+          />
+        </Container>
+      </div>
+
+      <HelpTooltip
+        page="search"
+        positionStyle={{
+          position: "fixed",
+          bottom: "30px",
+          right: "30px",
+        }}
+      />
+    </div>
   );
 }
 
