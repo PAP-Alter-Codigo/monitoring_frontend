@@ -20,12 +20,18 @@ export default function NoticiasRecientes() {
     const [locationsMap, setLocationsMap] = useState({});
 
     useEffect(() => {
-        fetchWithAuth(`${apiUrl}/articles`)
+        // Fetch only the 3 most recent articles using the limit param
+        fetchWithAuth(`${apiUrl}/articles?limit=3`)
             .then((res) => res.json())
-            .then((data) => {
-                setData(data.slice(0, 3));
+            .then((articles) => {
+                setData(Array.isArray(articles) ? articles : []);
+                setDataIsLoaded(true);
+            })
+            .catch(() => {
+                setData([]);
                 setDataIsLoaded(true);
             });
+
         Promise.all([
             fetchWithAuth(`${apiUrl}/tags`).then((res) => res.json()),
             fetchWithAuth(`${apiUrl}/actors`).then((res) => res.json()),
@@ -34,15 +40,15 @@ export default function NoticiasRecientes() {
             const tMap = {},
                 aMap = {},
                 lMap = {};
-            tags.forEach((tag) => (tMap[tag.id] = tag.name));
-            actors.forEach((actor) => (aMap[actor.id] = actor.name));
-            locations.forEach((loc) => (lMap[loc.id] = loc.name));
+            if (Array.isArray(tags))      tags.forEach((tag) => (tMap[tag.id] = tag.name));
+            if (Array.isArray(actors))    actors.forEach((actor) => (aMap[actor.id] = actor.name));
+            if (Array.isArray(locations)) locations.forEach((loc) => (lMap[loc.id] = loc.name));
             setTagsMap(tMap);
             setActorsMap(aMap);
             setLocationsMap(lMap);
-        });
+        }).catch(() => {});
 
-    }, []);
+    }, [apiUrl]);
 
     return (
         <>
@@ -80,8 +86,6 @@ export default function NoticiasRecientes() {
 
                         {/* News List */}
                         <div className="d-flex flex-column gap-3">
-
-                            {/* ITEM EXAMPLE */}
 
                             {data.map(item => {
                                 const origin = item.origin?.toLowerCase();
