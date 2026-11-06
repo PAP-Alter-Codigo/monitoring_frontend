@@ -136,10 +136,25 @@ function ArticleList({ articles, actorsMap, tagsMap, locationsMap }) {
                                                 color: '#6c757d',
                                                 padding: '8px 0'
                                             }}>
-                                                {/* autor */}
+                                                {/* autor con truncado a máximo 2 líneas */}
                                                 <div className="metadata-item">
                                                     <div style={{ fontSize: 'var(--fs-xs)', fontWeight: 600, marginBottom: '4px' }}>Autor</div>
-                                                    <div style={{ fontSize: 'var(--fs-sm)', fontWeight: 500, color: '#333' }}>{item.author || 'N/A'}</div>
+                                                    <div 
+                                                        title={item.author || 'N/A'}
+                                                        style={{ 
+                                                            fontSize: 'var(--fs-sm)', 
+                                                            fontWeight: 500, 
+                                                            color: '#333',
+                                                            display: '-webkit-box',
+                                                            WebkitLineClamp: 2,
+                                                            WebkitBoxOrient: 'vertical',
+                                                            overflow: 'hidden',
+                                                            textOverflow: 'ellipsis',
+                                                            wordBreak: 'break-word'
+                                                        }}
+                                                    >
+                                                        {item.author || 'N/A'}
+                                                    </div>
                                                 </div>
 
                                                 {/* fecha */}
