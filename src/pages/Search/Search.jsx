@@ -54,6 +54,14 @@ function buildQueryString(filters, tagsMap, actorsMap, page, limit, exportAll = 
   return params.toString();
 }
 
+const normalizeActorName = (name) =>
+  (name || "")
+    .trim()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toUpperCase()
+    .replace(/\s+/g, "_");
+
 function Search() {
   const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
@@ -105,7 +113,7 @@ function Search() {
       .then(([tags, actors, locations, firstPage]) => {
         const tMap = {}, aMap = {}, lMap = {};
         if (Array.isArray(tags))      tags.forEach((t) => (tMap[t.id] = t.name));
-        if (Array.isArray(actors))    actors.forEach((a) => (aMap[a.id] = a.name));
+        if (Array.isArray(actors))    actors.forEach((a) => (aMap[a.id] = normalizeActorName(a.name)));
         if (Array.isArray(locations)) locations.forEach((l) => (lMap[l.id] = l.name));
 
         tagsMapRef.current   = tMap;
@@ -133,6 +141,22 @@ function Search() {
             setSourceNames(uniqueSources);
             setCoverageLevels(uniqueCoverage);
             setAuthorNames(uniqueAuthors);
+
+            // Merge any actors from allArticles that might be stored directly as names or new IDs
+            const mergedActors = { ...aMap };
+            allArticles.forEach((art) => {
+              if (Array.isArray(art.actorsMentioned)) {
+                art.actorsMentioned.forEach((actor) => {
+                  if (actor && typeof actor === "string" && actor.trim()) {
+                    const normalized = normalizeActorName(actor);
+                    if (aMap[actor] || aMap[normalized] || Object.values(mergedActors).includes(normalized)) return;
+                    mergedActors[normalized] = normalized;
+                  }
+                });
+              }
+            });
+            actorsMapRef.current = mergedActors;
+            setActorsMap(mergedActors);
           });
       })
       .catch((err) => console.error("Error al cargar catálogos:", err))
@@ -188,19 +212,39 @@ function Search() {
       const allArticles = await res.json();
 
       const dataToExport = (Array.isArray(allArticles) ? allArticles : []).map((item) => ({
-        Titular:    item.headline || "",
-        Fuente:     item.sourceName || "",
-        Fecha:      item.publicationDate || "",
-        Autor:      item.author || "",
-        Relevancia: item.relevance || item.relevanceLevel || item.relevance_level || "",
-        "Por qué":  item.why || item.whyItMatters || item.why_it_matters || "",
-        Resumen:    item.summary || "",
-        Enlace:     item.url || "",
+        Titular:               item.headline || "",
+        Fuente:                item.sourceName || "",
+        Fecha:                 item.publicationDate || "",
+        Autor:                 item.author || "",
+        "Actores Mencionados": Array.isArray(item.actorsMentioned)
+          ? item.actorsMentioned
+              .map((id) => actorsMapRef.current[id] || (typeof id === "string" ? normalizeActorName(id) : id))
+              .filter(Boolean)
+              .join(", ")
+          : "",
+        Relevancia:            (() => {
+          const raw = item.relevance || item.relevanceLevel || item.relevance_level || "";
+          const map = {
+            high: "Alta",
+            medium: "Media",
+            low: "Baja",
+            none: "Ninguna",
+            alta: "Alta",
+            media: "Media",
+            baja: "Baja",
+            ninguna: "Ninguna",
+          };
+          const key = String(raw).trim().toLowerCase();
+          return map[key] || (raw ? raw.charAt(0).toUpperCase() + raw.slice(1) : "");
+        })(),
+        "Por qué":             item.why || item.whyItMatters || item.why_it_matters || "",
+        Resumen:               item.summary || "",
+        Enlace:                item.url || "",
       }));
 
       const worksheet = XLSX.utils.json_to_sheet(dataToExport);
       worksheet["!cols"] = [
-        { wch: 40 }, { wch: 20 }, { wch: 12 }, { wch: 25 },
+        { wch: 40 }, { wch: 20 }, { wch: 12 }, { wch: 25 }, { wch: 35 },
         { wch: 15 }, { wch: 45 }, { wch: 50 }, { wch: 40 },
       ];
       const workbook = XLSX.utils.book_new();

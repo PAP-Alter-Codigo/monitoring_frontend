@@ -10,6 +10,16 @@ const MONTHS_ES = [
     'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
 ];
 
+const RELEVANCE_ES = {
+    high: 'Alta', medium: 'Media', low: 'Baja', none: 'Ninguna',
+    alta: 'Alta', media: 'Media', baja: 'Baja', ninguna: 'Ninguna',
+};
+
+function formatRelevance(raw) {
+    const key = String(raw || '').trim().toLowerCase();
+    return RELEVANCE_ES[key] || (raw ? raw.charAt(0).toUpperCase() + raw.slice(1) : null);
+}
+
 function getMonthKey(publicationDate) {
     const date = parseDate(publicationDate);
     if (!date) return 'Sin fecha';
@@ -190,7 +200,27 @@ function ArticleList({ articles, actorsMap, tagsMap, locationsMap }) {
                                                         </div>
                                                     </div>
                                                 )}
+
+                                                {/* relevancia */}
+                                                {(item.relevance || item.relevanceLevel || item.relevance_level) && (
+                                                    <div className="metadata-item">
+                                                        <div style={{ fontSize: 'var(--fs-xs)', fontWeight: 600, marginBottom: '4px' }}>Relevancia</div>
+                                                        <div style={{ fontSize: 'var(--fs-sm)', fontWeight: 500, color: '#333' }}>
+                                                            {formatRelevance(item.relevance || item.relevanceLevel || item.relevance_level)}
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </div>
+
+                                            {/* por qué */}
+                                            {(item.why || item.whyItMatters || item.why_it_matters) && (
+                                                <div>
+                                                    <div style={{ fontSize: 'var(--fs-xs)', fontWeight: 600, color: '#555', marginBottom: '4px' }}>Por qué</div>
+                                                    <div style={{ fontSize: 'var(--fs-sm)', color: '#444', fontStyle: 'italic', lineHeight: 'var(--lh-normal)' }}>
+                                                        {item.why || item.whyItMatters || item.why_it_matters}
+                                                    </div>
+                                                </div>
+                                            )}
 
                                             {/* summary */}
                                             {item.summary && (
@@ -218,11 +248,16 @@ function ArticleList({ articles, actorsMap, tagsMap, locationsMap }) {
                                                         Actores Mencionados
                                                     </div>
                                                     <div className="d-flex flex-wrap gap-2">
-                                                        {item.actorsMentioned.map((id) => (
-                                                            <span key={id} className="badge rounded-pill" style={{ background: 'rgba(108,117,125,0.15)', color: '#6c757d', fontSize: 'var(--fs-sm)' }}>
-                                                                {actorsMap[id] || id}
-                                                            </span>
-                                                        ))}
+                                                        {item.actorsMentioned.map((id) => {
+                                                            const displayName = actorsMap[id] || (typeof id === 'string'
+                                                                ? id.trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase().replace(/\s+/g, '_')
+                                                                : id);
+                                                            return (
+                                                                <span key={id} className="badge rounded-pill" style={{ background: 'rgba(108,117,125,0.15)', color: '#6c757d', fontSize: 'var(--fs-sm)' }}>
+                                                                    {displayName}
+                                                                </span>
+                                                            );
+                                                        })}
                                                     </div>
                                                 </div>
                                             )}

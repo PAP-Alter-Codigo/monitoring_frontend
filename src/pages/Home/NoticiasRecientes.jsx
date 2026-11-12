@@ -8,6 +8,14 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 
+const normalizeActorName = (name) =>
+  (name || '')
+    .trim()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toUpperCase()
+    .replace(/\s+/g, '_');
+
 export default function NoticiasRecientes() {
     const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
     const navigate = useNavigate();
@@ -41,7 +49,7 @@ export default function NoticiasRecientes() {
                 aMap = {},
                 lMap = {};
             if (Array.isArray(tags))      tags.forEach((tag) => (tMap[tag.id] = tag.name));
-            if (Array.isArray(actors))    actors.forEach((actor) => (aMap[actor.id] = actor.name));
+            if (Array.isArray(actors))    actors.forEach((actor) => (aMap[actor.id] = normalizeActorName(actor.name)));
             if (Array.isArray(locations)) locations.forEach((loc) => (lMap[loc.id] = loc.name));
             setTagsMap(tMap);
             setActorsMap(aMap);
@@ -198,11 +206,14 @@ export default function NoticiasRecientes() {
                                                 <div>
                                                     <div style={{ fontSize: 'var(--fs-sm)', fontWeight: 600, color: '#555', marginBottom: '6px' }}>Actores Mencionados</div>
                                                     <div className="d-flex flex-wrap gap-2">
-                                                        {item.actorsMentioned.map((id) => (
-                                                            <span key={id} className="badge rounded-pill" style={{ background: 'rgba(108,117,125,0.15)', color: '#6c757d', fontSize: 'var(--fs-sm)' }}>
-                                                                {actorsMap[id] || id}
-                                                            </span>
-                                                        ))}
+                                                        {item.actorsMentioned.map((id) => {
+                                                            const displayName = actorsMap[id] || (typeof id === 'string' ? normalizeActorName(id) : id);
+                                                            return (
+                                                                <span key={id} className="badge rounded-pill" style={{ background: 'rgba(108,117,125,0.15)', color: '#6c757d', fontSize: 'var(--fs-sm)' }}>
+                                                                    {displayName}
+                                                                </span>
+                                                            );
+                                                        })}
                                                     </div>
                                                 </div>
                                             )}
