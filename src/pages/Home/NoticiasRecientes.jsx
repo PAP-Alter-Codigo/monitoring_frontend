@@ -207,10 +207,11 @@ export default function NoticiasRecientes() {
                                                     <div style={{ fontSize: 'var(--fs-sm)', fontWeight: 600, color: '#555', marginBottom: '6px' }}>Actores Mencionados</div>
                                                     <div className="d-flex flex-wrap gap-2">
                                                         {item.actorsMentioned.map((id) => {
-                                                            const displayName = actorsMap[id] || (typeof id === 'string' ? normalizeActorName(id) : id);
+                                                            const fullName = actorsMap[id] || (typeof id === 'string' ? normalizeActorName(id) : id);
+                                                            const shortName = fullName.length > 30 ? fullName.slice(0, 28) + '…' : fullName;
                                                             return (
-                                                                <span key={id} className="badge rounded-pill" style={{ background: 'rgba(108,117,125,0.15)', color: '#6c757d', fontSize: 'var(--fs-sm)' }}>
-                                                                    {displayName}
+                                                                <span key={id} title={fullName} className="badge rounded-pill" style={{ background: 'rgba(108,117,125,0.15)', color: '#6c757d', fontSize: 'var(--fs-sm)', cursor: 'default' }}>
+                                                                    {shortName}
                                                                 </span>
                                                             );
                                                         })}

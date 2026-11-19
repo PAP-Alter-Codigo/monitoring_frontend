@@ -280,7 +280,7 @@ function Filters({
                   <Col key={id} xs={6} md={4} lg={3}>
                     <Form.Check
                       type="checkbox"
-                      label={name}
+                      label={<span title={name}>{name.length > 30 ? name.slice(0, 28) + '…' : name}</span>}
                       value={name}
                       checked={filters.actorsMentioned.includes(name)}
                       onChange={(e) =>

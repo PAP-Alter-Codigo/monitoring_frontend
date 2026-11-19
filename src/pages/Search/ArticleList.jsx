@@ -220,12 +220,13 @@ function ArticleList({ articles, actorsMap, tagsMap, locationsMap }) {
                                                     </div>
                                                     <div className="d-flex flex-wrap gap-2">
                                                         {item.actorsMentioned.map((id) => {
-                                                            const displayName = actorsMap[id] || (typeof id === 'string'
+                                                            const fullName = actorsMap[id] || (typeof id === 'string'
                                                                 ? id.trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase().replace(/\s+/g, '_')
                                                                 : id);
+                                                            const shortName = fullName.length > 30 ? fullName.slice(0, 28) + '…' : fullName;
                                                             return (
-                                                                <span key={id} className="badge rounded-pill" style={{ background: 'rgba(108,117,125,0.15)', color: '#6c757d', fontSize: 'var(--fs-sm)' }}>
-                                                                    {displayName}
+                                                                <span key={id} title={fullName} className="badge rounded-pill" style={{ background: 'rgba(108,117,125,0.15)', color: '#6c757d', fontSize: 'var(--fs-sm)', cursor: 'default' }}>
+                                                                    {shortName}
                                                                 </span>
                                                             );
                                                         })}
